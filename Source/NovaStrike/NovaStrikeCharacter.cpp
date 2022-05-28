@@ -7,6 +7,7 @@
 #include "GameFramework/CharacterMovementComponent.h"
 #include "GameFramework/Controller.h"
 #include "GameFramework/SpringArmComponent.h"
+#include "NS_Enum.h"
 
 //////////////////////////////////////////////////////////////////////////
 // ANovaStrikeCharacter
@@ -58,7 +59,7 @@ void ANovaStrikeCharacter::SetupPlayerInputComponent(class UInputComponent* Play
 {
 	// Set up gameplay key bindings
 	check(PlayerInputComponent);
-	PlayerInputComponent->BindAction("Jump", IE_Pressed, this, &ACharacter::Jump);
+	PlayerInputComponent->BindAction("Jump", IE_Pressed, this, &ANovaStrikeCharacter::StartJump);
 	PlayerInputComponent->BindAction("Jump", IE_Released, this, &ACharacter::StopJumping);
 
 	PlayerInputComponent->BindAxis("Move Forward / Backward", this, &ANovaStrikeCharacter::MoveForward);
@@ -85,6 +86,11 @@ void ANovaStrikeCharacter::TouchStarted(ETouchIndex::Type FingerIndex, FVector L
 void ANovaStrikeCharacter::TouchStopped(ETouchIndex::Type FingerIndex, FVector Location)
 {
 	StopJumping();
+}
+
+void ANovaStrikeCharacter::StartJump()
+{
+	OnStartJump();
 }
 
 void ANovaStrikeCharacter::TurnAtRate(float Rate)
