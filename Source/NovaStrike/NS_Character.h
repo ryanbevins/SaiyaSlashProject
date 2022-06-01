@@ -17,11 +17,16 @@ class NOVASTRIKE_API ANS_Character : public ANovaStrikeCharacter
 
 public:
 	ANS_Character();
+	UFUNCTION(BlueprintCallable, Category = "Combat")
+	virtual void SetCurrentCombatState(ECombatState NewState);
+
+	UPROPERTY(BlueprintReadOnly, Category = "Combat")
+	TArray<ANS_Character*> CurrentEnemiesInCombatWith;
 
 protected:
 	virtual void BeginPlay() override;
 
-	UPROPERTY(BlueprintReadOnly, BlueprintReadOnly, Category="Movement")
+	UPROPERTY(BlueprintReadOnly, Category="Movement")
 	bool bIsSprinting;
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Movement")
 	float SprintSpeed = 1100;
@@ -35,6 +40,7 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Camera")
 	float CameraZoomSpeed = 1;
 
+
 	UFUNCTION(BlueprintCallable, Category = "Movement")
 	void Sprint();
 	UFUNCTION(BlueprintCallable, Category = "Movement")
@@ -42,10 +48,13 @@ protected:
 
 	UFUNCTION(BlueprintImplementableEvent, Category = "Camera")
 	void ZoomCamera(float DesiredArmLength);
+	UFUNCTION(BlueprintImplementableEvent, Category = "Combat")
+	void OnEnterCombatMode();
+	UFUNCTION(BlueprintImplementableEvent, Category = "Combat")
+	void OnEnterNeutralMode();
 
 	float CurrentDesiredArmLength = DefaultArmLength;
 
-	virtual void SetCurrentPlayerState(ECombatState NewState);
 	virtual void EnterCombatMode();
 	virtual void EnterNeutralMode();
 };

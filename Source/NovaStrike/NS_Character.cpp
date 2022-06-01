@@ -33,14 +33,28 @@ void ANS_Character::StopSprint()
 	ZoomCamera(CurrentDesiredArmLength);
 }
 
-void ANS_Character::SetCurrentPlayerState(ECombatState NewState)
+void ANS_Character::SetCurrentCombatState(ECombatState NewState)
 {
+	if (CurrentCombatState != NewState) {
+		CurrentCombatState = NewState;
+		switch (NewState)
+		{
+		case ECombatState::Neutral:
+			EnterNeutralMode();
+			break;
+		case ECombatState::InCombat:
+			EnterCombatMode();
+			break;
+		}
+	}
 }
 
 void ANS_Character::EnterCombatMode()
 {
+	OnEnterCombatMode();
 }
 
 void ANS_Character::EnterNeutralMode()
 {
+	OnEnterNeutralMode();
 }

@@ -9,29 +9,21 @@ void ANS_Character_Farak::BeginPlay()
 	Super::BeginPlay();
 }
 
-void ANS_Character_Farak::SetCurrentPlayerState(ECombatState NewState)
+void ANS_Character_Farak::SetCurrentCombatState(ECombatState NewState)
 {
-	Super::SetCurrentPlayerState(NewState);
-	CurrentCombatState = NewState;
-	switch (NewState)
-	{
-	case ECombatState::Neutral:
-		EnterNeutralMode();
-		break;
-	case ECombatState::InCombat:
-		EnterCombatMode();
-		break;
-	}
+	Super::SetCurrentCombatState(NewState);
 }
 
 void ANS_Character_Farak::EnterCombatMode()
 {
 	Super::EnterCombatMode();
-	CameraBoom->TargetArmLength = CombatArmLength;
+	CurrentDesiredArmLength = CurrentDesiredArmLength + CombatArmLengthChange;
+	ZoomCamera(CurrentDesiredArmLength);
 }
 
 void ANS_Character_Farak::EnterNeutralMode()
 {
 	Super::EnterNeutralMode();
-	CameraBoom->TargetArmLength = NeutralArmLength;
+	CurrentDesiredArmLength = CurrentDesiredArmLength - CombatArmLengthChange;
+	ZoomCamera(CurrentDesiredArmLength);
 }
