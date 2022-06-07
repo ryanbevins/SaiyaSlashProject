@@ -22,9 +22,6 @@ protected:
 	virtual void EnterCombatMode() override;
 	virtual void EnterNeutralMode() override;
 
-	UFUNCTION(BlueprintCallable, Category = Combat)
-	void ToggleAggression(bool bIsAggressive);
-
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Combat, meta = (AllowPrivateAccess = "true"))
 	UBoxComponent* EnemyAggressionBox;
 

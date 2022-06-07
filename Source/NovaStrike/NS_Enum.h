@@ -8,6 +8,7 @@
  * 
  */
 UENUM()
+
 enum class ECombatState : uint8 {
 	Neutral,
 	InCombat

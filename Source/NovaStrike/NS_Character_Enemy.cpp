@@ -36,7 +36,3 @@ void ANS_Character_Enemy::EnterNeutralMode()
 		Player->SetCurrentCombatState(ECombatState::Neutral);
 	}
 }
-
-void ANS_Character_Enemy::ToggleAggression(bool bIsAggressive)
-{
-}
