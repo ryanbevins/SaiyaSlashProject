@@ -107,7 +107,7 @@ void ANovaStrikeCharacter::LookUpAtRate(float Rate)
 
 void ANovaStrikeCharacter::MoveForward(float Value)
 {
-	if ((Controller != nullptr) && (Value != 0.0f))
+	if ((Controller != nullptr) && (Value != 0.0f) && !AwaitingAttackAnimFinish)
 	{
 		// find out which way is forward
 		const FRotator Rotation = Controller->GetControlRotation();
@@ -121,7 +121,7 @@ void ANovaStrikeCharacter::MoveForward(float Value)
 
 void ANovaStrikeCharacter::MoveRight(float Value)
 {
-	if ( (Controller != nullptr) && (Value != 0.0f) )
+	if ( (Controller != nullptr) && (Value != 0.0f) && !AwaitingAttackAnimFinish)
 	{
 		// find out which way is right
 		const FRotator Rotation = Controller->GetControlRotation();

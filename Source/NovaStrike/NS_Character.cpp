@@ -5,20 +5,31 @@
 #include "GameFramework/SpringArmComponent.h"
 #include "Kismet/KismetSystemLibrary.h"
 #include "Kismet/GameplayStatics.h"
+#include "Kismet/KismetMathLibrary.h"
 #include "Camera/CameraComponent.h"
 #include "Engine/Engine.h"
+#include "Components/BoxComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
 
 ANS_Character::ANS_Character()
 {
 	GetCharacterMovement()->MaxWalkSpeed = WalkSpeed;
 	CameraBoom->TargetArmLength = DefaultArmLength;
+	HitBox = CreateDefaultSubobject<UBoxComponent>(TEXT("HitBox"));
+	AttackBox = CreateDefaultSubobject<UBoxComponent>(TEXT("AttackBox"));
+	HitBox->SetupAttachment(GetRootComponent());
+	AttackBox->SetupAttachment(GetRootComponent());
+}
+
+void ANS_Character::AttackBoxOverlapBegin(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
+{
 }
 
 void ANS_Character::BeginPlay()
 {
 	Super::BeginPlay();
 	UE_LOG(LogTemp, Warning, TEXT("Hello from NS_Character"));
+	DefaultGravity = GetCharacterMovement()->GravityScale;
 }
 
 void ANS_Character::Sprint()
@@ -128,10 +139,73 @@ bool ANS_Character::TryBeginTargetting()
 	return false;
 }
 
+// TODO: Implemented in child classesa, create some base functionality.
 void ANS_Character::Target(AActor* ActorToTarget)
 {
 }
 
+// TODO: Implemented in child classesa, create some base functionality.
 void ANS_Character::EndTargetting()
 {
+}
+
+void ANS_Character::ContinueCombat()
+{
+	AwaitingAttackAnimFinish = false;
+	if ((Attacks.Num() - 1) != CurrentAttackIndex) {
+		CurrentAttackIndex++;
+	}
+	else CurrentAttackIndex = 0;
+	if (WaitingToAttack) {
+		WaitingToAttack = false;
+		Attack();
+	}
+	IsAttacking = false;
+}
+
+void ANS_Character::ResetCombo()
+{
+	CurrentAttackIndex = 0;
+	CanCancelAttack = false;
+	IsAttacking = false;
+}
+
+void ANS_Character::TakeDamage(float DamageAmount, UAnimMontage* Montage, FVector Launch)
+{
+	GetMesh()->GetAnimInstance()->Montage_Play(Montage, 1, EMontagePlayReturnType::Duration, 0, true);
+	LaunchCharacter(Launch, false, false);
+}
+
+void ANS_Character::Attack()
+{
+	TArray<FAttack> AttacksToUse = GetCharacterMovement()->IsMovingOnGround() ? Attacks : AirAttacks;
+	if (bIsSprinting && GetCharacterMovement()->IsMovingOnGround()) { 
+		AttacksToUse = SprintAttacks;
+		CurrentAttackIndex = 0;
+	}
+	if (!AwaitingAttackAnimFinish) {
+		IsAttacking = true;
+		if(CurrentlyTargettedActor || CurrentEnemiesInCombatWith.Num() > 0) {
+			AActor* ActorToTarget = CurrentlyTargettedActor ? CurrentlyTargettedActor : GetNearestCharacter();
+			FRotator LookAtRot = (UKismetMathLibrary::FindLookAtRotation(GetActorLocation(), ActorToTarget->GetActorLocation()));
+			FRotator NewRotator = FRotator(0, LookAtRot.Yaw, 0);
+			SetActorRotation(NewRotator);
+		}
+		GetMesh()->GetAnimInstance()->Montage_Play(AttacksToUse[CurrentAttackIndex].AttackMontage, 1, EMontagePlayReturnType::Duration, 0, true);
+		AwaitingAttackAnimFinish = true;
+		GetWorld()->GetTimerManager().SetTimer(AttackResetTimerHandle, this, &ANS_Character::ResetCombo, ComboResetTime);
+	}
+	else {
+		if(CurrentAttackIndex != AttacksToUse.Num()-1)
+			WaitingToAttack = true;
+	}
+}
+
+void ANS_Character::EndCombat()
+{
+	AttackResetTimerHandle.Invalidate();
+	WaitingToAttack = false;
+	IsAttacking = false;
+	AwaitingAttackAnimFinish = false;
+	CurrentAttackIndex = 0;
 }

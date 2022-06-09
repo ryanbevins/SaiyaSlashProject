@@ -29,6 +29,15 @@ public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Combat)
 	ECombatState CurrentCombatState;
 
+	UPROPERTY(BlueprintReadWrite, Category = "Combat")
+	bool AwaitingAttackAnimFinish;
+
+	UPROPERTY(BlueprintReadWrite, Category = "Combat")
+	bool IsAttacking;
+
+	UPROPERTY(BlueprintReadWrite, Category = "Combat")
+	bool CanCancelAttack;
+
 
 
 protected:

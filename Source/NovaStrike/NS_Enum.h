@@ -13,6 +13,7 @@ enum class ECombatState : uint8 {
 	Neutral,
 	InCombat
 };
+
 class NOVASTRIKE_API NS_Enum
 {
 public:

@@ -18,15 +18,21 @@ struct FAttack
 	// Attack montage to use
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Attack")
 	UAnimMontage* AttackMontage;
+	// Enemy hit reaciton montage to use
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Attack")
+	UAnimMontage* EnemyHitReaction;
 	// CameraShake to use
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Attack")
-	UCameraShakeBase* CameraShake;
+	TSubclassOf<UCameraShakeBase> CameraShake;
 	// Launch force to use
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Attack")
-	float LaunchForce;
+	FVector2D LaunchForce;
 	// Knockback to apply to enemy
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Attack")
-	float Knockback;
+	FVector2D Knockback;
+	// Gravity to apply to hit enemy and player
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Attack")
+	float NewGravity;
 };
 
 
@@ -44,6 +50,15 @@ public:
 	UPROPERTY(BlueprintReadOnly, Category = "Combat")
 	TArray<ANS_Character*> CurrentEnemiesInCombatWith;
 
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Combat, meta = (AllowPrivateAccess = "true"))
+	class UBoxComponent* HitBox;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Combat, meta = (AllowPrivateAccess = "true"))
+	class UBoxComponent* AttackBox;
+
+	UFUNCTION()
+	void AttackBoxOverlapBegin(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
+
 protected:
 	virtual void BeginPlay() override;
 
@@ -53,6 +68,8 @@ protected:
 	float SprintSpeed = 1100;
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Movement")
 	float WalkSpeed = 900;
+	UPROPERTY(BlueprintReadOnly, Category = "Movement")
+	float DefaultGravity;
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Camera")
 	float ArmLengthDistanceChangeOnSprint = 100;
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Camera")
@@ -63,12 +80,23 @@ protected:
 	// Zoom Speed for arm length changes(1 = 1 second, 0.5 = 2 seconds, 2 = 0.5 seconds, etc).
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Combat")
 	TArray<FAttack> Attacks;
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Combat")
+	TArray<FAttack> AirAttacks;
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Combat")
+	TArray<FAttack> SprintAttacks;
+	UPROPERTY(BlueprintReadWrite, Category = "Combat")
+	int CurrentAttackIndex;
+	UPROPERTY(BlueprintReadWrite, Category = "Combat")
+	bool WaitingToAttack;
+	UPROPERTY(BlueprintReadWrite, Category = "Combat")
+	TArray<ANS_Character*> ActorsInAttackRange;
+	UPROPERTY(EditAnywhere, Category = "Combat")
+	float ComboResetTime = 2.f;
 
 	UPROPERTY(BlueprintReadOnly, Category = "Combat")
 	AActor* CurrentlyTargettedActor;
 
 	float CurrentDesiredArmLength = DefaultArmLength;
-
 	FVector ArmLocationDefaultOffset;
 
 	UFUNCTION(BlueprintCallable, Category = "Movement")
@@ -79,6 +107,10 @@ protected:
 	TArray<ANS_Character*> SphereTraceForCharacters(float Distance, float Radius, bool DrawDebug);
 	UFUNCTION(BlueprintCallable, Category = "General")
 	ANS_Character* GetNearestCharacter();
+	UFUNCTION(BlueprintCallable, Category = "Combat")
+	void Attack();
+	UFUNCTION(BlueprintCallable, Category = "Combat")
+	void EndCombat();
 
 	UFUNCTION(BlueprintImplementableEvent, Category = "Camera")
 	void ZoomCamera(float DesiredArmLength);
@@ -88,13 +120,23 @@ protected:
 	void OnEnterNeutralMode();
 	UFUNCTION(BlueprintImplementableEvent, Category = "Combat")
 	void OnTarget();
+	UFUNCTION(BlueprintCallable, Category = "Combat")
+	void ContinueCombat();
+	UFUNCTION(BlueprintCallable, Category = "Combat")
+	void ResetCombo();
+	UFUNCTION(BlueprintCallable, Category = "Combat")
+	void TakeDamage(float DamageAmount, UAnimMontage* Montage, FVector Launch);
+
 	// TODO: Take in class reference for targetting based on specific class after converting "GetNearestCharacter()" to be used for any variable class.
 	// Try targetting based on camera direction, returns true if is now targetting.
 	UFUNCTION(BlueprintCallable, Category = "Camera")
 	virtual bool TryBeginTargetting();
 
+
 	virtual void EnterCombatMode();
 	virtual void EnterNeutralMode();
 	virtual void Target(AActor* ActorToTarget);
 	virtual void EndTargetting();
+
+	FTimerHandle AttackResetTimerHandle;
 };

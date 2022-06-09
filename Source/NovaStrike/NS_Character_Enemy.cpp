@@ -13,6 +13,7 @@ ANS_Character_Enemy::ANS_Character_Enemy()
 
 void ANS_Character_Enemy::BeginPlay()
 {
+	Super::BeginPlay();
 	Player = Cast<ANS_Character>(UGameplayStatics::GetActorOfClass(this, ANS_Character_Farak::StaticClass()));
 	if (Player) {
 		UE_LOG(LogTemp, Warning, TEXT("Hello from NS_Character_Enemy"));
