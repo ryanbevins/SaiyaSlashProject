@@ -5,6 +5,7 @@
 #include "Kismet/KismetMathLibrary.h"
 #include "NS_Enum.h"
 #include "NS_Character_Farak.h"
+#include "GameFramework/CharacterMovementComponent.h"
 
 void ANS_Character_Farak::BeginPlay()
 {
@@ -17,6 +18,8 @@ void ANS_Character_Farak::Tick(float DeltaTime)
 	if (CurrentlyTargettedActor) {
 		Target(CurrentlyTargettedActor);
 	}
+	FRotator Speed = GetCharacterMovement()->RotationRate;
+	UE_LOG(LogTemp, Warning, TEXT("CurrentRotatationRate: %f"), Speed.Yaw)
 }
 
 void ANS_Character_Farak::SetCurrentCombatState(ECombatState NewState)

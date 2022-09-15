@@ -8,10 +8,15 @@
  * 
  */
 UENUM()
-
 enum class ECombatState : uint8 {
 	Neutral,
 	InCombat
+};
+
+UENUM()
+enum class ECombatType : uint8 {
+	Normal,
+	Nova
 };
 
 class NOVASTRIKE_API NS_Enum

@@ -61,6 +61,9 @@ void ANovaStrikeCharacter::SetupPlayerInputComponent(class UInputComponent* Play
 	check(PlayerInputComponent);
 	PlayerInputComponent->BindAction("Jump", IE_Pressed, this, &ANovaStrikeCharacter::StartJump);
 	PlayerInputComponent->BindAction("Jump", IE_Released, this, &ACharacter::StopJumping);
+	PlayerInputComponent->BindAction("Nova", IE_Pressed, this, &ANovaStrikeCharacter::StartNova);
+	PlayerInputComponent->BindAction("Nova", IE_Released, this, &ANovaStrikeCharacter::EndNova);
+	PlayerInputComponent->BindAction("NovaBlast", IE_Released, this, &ANovaStrikeCharacter::OnNovaBlast);
 
 	PlayerInputComponent->BindAxis("Move Forward / Backward", this, &ANovaStrikeCharacter::MoveForward);
 	PlayerInputComponent->BindAxis("Move Right / Left", this, &ANovaStrikeCharacter::MoveRight);
@@ -93,6 +96,20 @@ void ANovaStrikeCharacter::StartJump()
 	OnStartJump();
 }
 
+void ANovaStrikeCharacter::StartNova()
+{
+	OnStartNova();
+	CurrentCombatType = ECombatType::Nova;
+	InNovaMode = true;
+}
+
+void ANovaStrikeCharacter::EndNova()
+{
+	OnEndNova();
+	CurrentCombatType = ECombatType::Normal;
+	InNovaMode = false;
+}
+
 void ANovaStrikeCharacter::TurnAtRate(float Rate)
 {
 	// calculate delta for this frame from the rate information
@@ -107,8 +124,11 @@ void ANovaStrikeCharacter::LookUpAtRate(float Rate)
 
 void ANovaStrikeCharacter::MoveForward(float Value)
 {
-	if ((Controller != nullptr) && (Value != 0.0f) && !AwaitingAttackAnimFinish)
+	if ((Controller != nullptr) && (Value != 0.0f))
 	{
+		if (Value > 0.5f || Value < -0.5f) {
+			Moved = true;
+		}
 		// find out which way is forward
 		const FRotator Rotation = Controller->GetControlRotation();
 		const FRotator YawRotation(0, Rotation.Yaw, 0);
@@ -121,8 +141,11 @@ void ANovaStrikeCharacter::MoveForward(float Value)
 
 void ANovaStrikeCharacter::MoveRight(float Value)
 {
-	if ( (Controller != nullptr) && (Value != 0.0f) && !AwaitingAttackAnimFinish)
+	if ( (Controller != nullptr) && (Value != 0.0f))
 	{
+		if (Value > 0.5f || Value < -0.5f) {
+			Moved = true;
+		}
 		// find out which way is right
 		const FRotator Rotation = Controller->GetControlRotation();
 		const FRotator YawRotation(0, Rotation.Yaw, 0);

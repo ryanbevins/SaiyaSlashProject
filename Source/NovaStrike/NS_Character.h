@@ -24,15 +24,30 @@ struct FAttack
 	// CameraShake to use
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Attack")
 	TSubclassOf<UCameraShakeBase> CameraShake;
+	// Forcefeedback to use during anim montage notify
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Attack")
+	UForceFeedbackEffect* ForceFeedbackNotify;
 	// Launch force to use
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Attack")
 	FVector2D LaunchForce;
 	// Knockback to apply to enemy
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Attack")
 	FVector2D Knockback;
+	// Damage to apply to enemy
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Attack")
+	float Damage;
 	// Gravity to apply to hit enemy and player
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Attack")
 	float NewGravity;
+	// Steering scale to apply to player after anim montage notify
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Attack")
+	float SteeringScale;
+	// Position offset to apply to hitbox
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Attack")
+	FVector HitBoxPositionOffset;
+	// Scaling to apply to hitbox
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Attack")
+	float HitBoxScale;
 };
 
 
@@ -90,6 +105,10 @@ protected:
 	bool WaitingToAttack;
 	UPROPERTY(BlueprintReadWrite, Category = "Combat")
 	TArray<ANS_Character*> ActorsInAttackRange;
+	UPROPERTY(BlueprintReadWrite, Category = "Combat")
+	bool InComboWindow;
+	UPROPERTY(BlueprintReadWrite, Category = "Combat")
+	bool Invincible;
 	UPROPERTY(EditAnywhere, Category = "Combat")
 	float ComboResetTime = 2.f;
 
@@ -98,6 +117,8 @@ protected:
 
 	float CurrentDesiredArmLength = DefaultArmLength;
 	FVector ArmLocationDefaultOffset;
+
+	FRotator DefaultRotationRate;
 
 	UFUNCTION(BlueprintCallable, Category = "Movement")
 	void Sprint();
@@ -111,6 +132,8 @@ protected:
 	void Attack();
 	UFUNCTION(BlueprintCallable, Category = "Combat")
 	void EndCombat();
+	UFUNCTION(BlueprintCallable, Category = "Combat")
+	FAttack GetCurrentAttack();
 
 	UFUNCTION(BlueprintImplementableEvent, Category = "Camera")
 	void ZoomCamera(float DesiredArmLength);
@@ -126,6 +149,14 @@ protected:
 	void ResetCombo();
 	UFUNCTION(BlueprintCallable, Category = "Combat")
 	void TakeDamage(float DamageAmount, UAnimMontage* Montage, FVector Launch);
+	UFUNCTION(BlueprintCallable, Category = "Combat")
+	void EnterNovaMode();
+	UFUNCTION(BlueprintCallable, Category = "Combat")
+	void EnableSteering(float SteeringAmount);
+	UFUNCTION(BlueprintCallable, Category = "Combat")
+	void ResetSteering();
+	UFUNCTION(BlueprintCallable, Category = "Combat")
+	void SetInvincible(bool NewInvincible);
 
 	// TODO: Take in class reference for targetting based on specific class after converting "GetNearestCharacter()" to be used for any variable class.
 	// Try targetting based on camera direction, returns true if is now targetting.
@@ -139,4 +170,5 @@ protected:
 	virtual void EndTargetting();
 
 	FTimerHandle AttackResetTimerHandle;
+
 };

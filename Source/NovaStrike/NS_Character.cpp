@@ -19,6 +19,7 @@ ANS_Character::ANS_Character()
 	AttackBox = CreateDefaultSubobject<UBoxComponent>(TEXT("AttackBox"));
 	HitBox->SetupAttachment(GetRootComponent());
 	AttackBox->SetupAttachment(GetRootComponent());
+	DefaultRotationRate = GetCharacterMovement()->RotationRate;
 }
 
 void ANS_Character::AttackBoxOverlapBegin(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
@@ -133,6 +134,17 @@ void ANS_Character::EnterNeutralMode()
 	OnEnterNeutralMode();
 }
 
+void ANS_Character::EnableSteering(float SteeringAmount)
+{
+	GetCharacterMovement()->RotationRate = DefaultRotationRate * SteeringAmount;
+}
+
+void ANS_Character::EnterNovaMode()
+{
+	InNovaMode = true;
+	
+}
+
 bool ANS_Character::TryBeginTargetting()
 {
 	OnTarget();
@@ -149,18 +161,34 @@ void ANS_Character::EndTargetting()
 {
 }
 
+void ANS_Character::ResetSteering()
+{
+	if (!IsAttacking)
+		GetCharacterMovement()->RotationRate = DefaultRotationRate;
+	else
+		GetCharacterMovement()->RotationRate = FRotator(0, 0, 0);
+}
+
+void ANS_Character::SetInvincible(bool NewInvincible)
+{
+	Invincible = NewInvincible;
+}
+
 void ANS_Character::ContinueCombat()
 {
-	AwaitingAttackAnimFinish = false;
-	if ((Attacks.Num() - 1) != CurrentAttackIndex) {
-		CurrentAttackIndex++;
+	if (InComboWindow) {
+		InComboWindow = false;
+		AwaitingAttackAnimFinish = false;
+		if ((Attacks.Num() - 1) != CurrentAttackIndex) {
+			CurrentAttackIndex++;
+		}
+		else CurrentAttackIndex = 0;
+		if (WaitingToAttack) {
+			WaitingToAttack = false;
+			Attack();
+		}
+		IsAttacking = false;
 	}
-	else CurrentAttackIndex = 0;
-	if (WaitingToAttack) {
-		WaitingToAttack = false;
-		Attack();
-	}
-	IsAttacking = false;
 }
 
 void ANS_Character::ResetCombo()
@@ -168,6 +196,10 @@ void ANS_Character::ResetCombo()
 	CurrentAttackIndex = 0;
 	CanCancelAttack = false;
 	IsAttacking = false;
+	ResetSteering();
+	//TODO: Make this work for sprinting as well
+	GetCharacterMovement()->MaxWalkSpeed = WalkSpeed;
+	UE_LOG(LogTemp, Warning, TEXT("WalkSpeedFromEndCombat: %f"), WalkSpeed)
 }
 
 void ANS_Character::TakeDamage(float DamageAmount, UAnimMontage* Montage, FVector Launch)
@@ -185,6 +217,8 @@ void ANS_Character::Attack()
 	}
 	if (!AwaitingAttackAnimFinish) {
 		IsAttacking = true;
+		GetCharacterMovement()->MaxWalkSpeed = 0;
+		GetCharacterMovement()->RotationRate = FRotator(0,0,0);
 		if(CurrentlyTargettedActor || CurrentEnemiesInCombatWith.Num() > 0) {
 			AActor* ActorToTarget = CurrentlyTargettedActor ? CurrentlyTargettedActor : GetNearestCharacter();
 			FRotator LookAtRot = (UKismetMathLibrary::FindLookAtRotation(GetActorLocation(), ActorToTarget->GetActorLocation()));
@@ -196,16 +230,31 @@ void ANS_Character::Attack()
 		GetWorld()->GetTimerManager().SetTimer(AttackResetTimerHandle, this, &ANS_Character::ResetCombo, ComboResetTime);
 	}
 	else {
-		if(CurrentAttackIndex != AttacksToUse.Num()-1)
+		if(CurrentAttackIndex != AttacksToUse.Num()-1 && InComboWindow)
 			WaitingToAttack = true;
 	}
 }
 
 void ANS_Character::EndCombat()
 {
+	GetMesh()->GetAnimInstance()->StopAllMontages(0.1f);
 	AttackResetTimerHandle.Invalidate();
 	WaitingToAttack = false;
 	IsAttacking = false;
 	AwaitingAttackAnimFinish = false;
 	CurrentAttackIndex = 0;
+	ResetSteering();
+	//TODO: Make this work for sprinting as well
+	GetCharacterMovement()->MaxWalkSpeed = WalkSpeed;
+	UE_LOG(LogTemp, Warning, TEXT("WalkSpeedFromEndCombat: %f"), WalkSpeed)
 }
+
+FAttack ANS_Character::GetCurrentAttack() 
+{
+	TArray<FAttack> AttacksToUse = GetCharacterMovement()->IsMovingOnGround() ? Attacks : AirAttacks;
+	if (bIsSprinting && GetCharacterMovement()->IsMovingOnGround()) {
+		AttacksToUse = SprintAttacks;
+	}
+	return AttacksToUse[CurrentAttackIndex];
+}
+
