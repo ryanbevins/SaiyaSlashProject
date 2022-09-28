@@ -1,0 +1,14 @@
+{
+	"Targets": [
+		{
+			"Name": "NovaStrike",
+			"Path": "C:\\Users\\ryanb\\Documents\\Unreal Projects\\NovaStrike\\Source\\NovaStrike.Target.cs",
+			"Type": "Game"
+		},
+		{
+			"Name": "NovaStrikeEditor",
+			"Path": "C:\\Users\\ryanb\\Documents\\Unreal Projects\\NovaStrike\\Source\\NovaStrikeEditor.Target.cs",
+			"Type": "Editor"
+		}
+	]
+}

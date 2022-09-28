@@ -1,0 +1,8 @@
+{
+	"SourceFiles": [
+		"C:\\Users\\ryanb\\Documents\\Unreal Projects\\NovaStrike\\Source\\NovaStrike\\NovaStrike.Build.cs",
+		"C:\\Users\\ryanb\\Documents\\Unreal Projects\\NovaStrike\\Source\\NovaStrike.Target.cs",
+		"C:\\Users\\ryanb\\Documents\\Unreal Projects\\NovaStrike\\Source\\NovaStrikeEditor.Target.cs"
+	],
+	"EngineVersion": "5.0.2"
+}

@@ -1,0 +1,14 @@
+{
+    "Version": "1.2",
+    "Data": {
+        "Source": "c:\\users\\ryanb\\documents\\unreal projects\\novastrike\\intermediate\\build\\win64\\unrealeditor\\inc\\novastrike\\ns_enum.gen.cpp",
+        "ProvidedModule": "",
+        "PCH": "c:\\users\\ryanb\\documents\\unreal projects\\novastrike\\intermediate\\build\\win64\\novastrikeeditor\\development\\engine\\sharedpch.engine.shadowerrors.h.pch",
+        "Includes": [
+            "c:\\users\\ryanb\\documents\\unreal projects\\novastrike\\intermediate\\build\\win64\\unrealeditor\\development\\novastrike\\definitions.novastrike.h",
+            "c:\\users\\ryanb\\documents\\unreal projects\\novastrike\\source\\novastrike\\ns_enum.h"
+        ],
+        "ImportedModules": [],
+        "ImportedHeaderUnits": []
+    }
+}
