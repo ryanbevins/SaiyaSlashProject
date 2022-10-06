@@ -40,12 +40,13 @@ public:
 	
 	UPROPERTY(BlueprintReadWrite, Category = "Combat")
 	ECombatType CurrentCombatType;
-	UPROPERTY(BlueprintReadWrite, Category = "Combat")
-	bool InNovaMode;
 
 	// TODO: Bad variable used in anim notify for movement during animation during attack, should be removed
 	UPROPERTY(BlueprintReadWrite, Category = "Combat")
 	bool Moved;
+
+	UPROPERTY(BlueprintReadWrite, Category = "Movement")
+	bool CanMove = true;
 
 
 protected:

@@ -1,5 +1,18 @@
 ﻿  Using bundled DotNet SDK
   Log file: C:\Users\ryanb\AppData\Local\UnrealBuildTool\Log.txt
   Using 'git status' to determine working set for adaptive non-unity build (C:\Users\ryanb\Documents\Unreal Projects\NovaStrike).
-  Target is up to date
-  Total execution time: 0.45 seconds
+  Deleted hot-reload file: C:\Users\ryanb\Documents\Unreal Projects\NovaStrike\Binaries\Win64\UnrealEditor-NovaStrike-0001.dll
+  Deleted hot-reload file: C:\Users\ryanb\Documents\Unreal Projects\NovaStrike\Binaries\Win64\UnrealEditor-NovaStrike-0001.pdb
+  Deleted hot-reload file: C:\Users\ryanb\Documents\Unreal Projects\NovaStrike\Intermediate\Build\Win64\UnrealEditor\Development\NovaStrike\UnrealEditor-NovaStrike-0001.lib
+  Building NovaStrikeEditor...
+  Using Visual Studio 2022 14.32.31329 toolchain (C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.32.31326) and Windows 10.0.19041.0 SDK (C:\Program Files (x86)\Windows Kits\10).
+  Determining max actions to execute in parallel (8 physical cores, 16 logical cores)
+    Executing up to 8 processes, one per physical core
+  Building 3 actions with 3 processes...
+  [1/3] Link UnrealEditor-NovaStrike.lib
+     Creating library C:\Users\ryanb\Documents\Unreal Projects\NovaStrike\Intermediate\Build\Win64\UnrealEditor\Development\NovaStrike\UnrealEditor-NovaStrike.lib and object C:\Users\ryanb\Documents\Unreal Projects\NovaStrike\Intermediate\Build\Win64\UnrealEditor\Development\NovaStrike\UnrealEditor-NovaStrike.exp
+  [2/3] Link UnrealEditor-NovaStrike.dll
+     Creating library C:\Users\ryanb\Documents\Unreal Projects\NovaStrike\Intermediate\Build\Win64\UnrealEditor\Development\NovaStrike\UnrealEditor-NovaStrike.suppressed.lib and object C:\Users\ryanb\Documents\Unreal Projects\NovaStrike\Intermediate\Build\Win64\UnrealEditor\Development\NovaStrike\UnrealEditor-NovaStrike.suppressed.exp
+  [3/3] WriteMetadata NovaStrikeEditor.target
+  Total time in Parallel executor: 0.91 seconds
+  Total execution time: 1.39 seconds

@@ -61,9 +61,6 @@ void ANovaStrikeCharacter::SetupPlayerInputComponent(class UInputComponent* Play
 	check(PlayerInputComponent);
 	PlayerInputComponent->BindAction("Jump", IE_Pressed, this, &ANovaStrikeCharacter::StartJump);
 	PlayerInputComponent->BindAction("Jump", IE_Released, this, &ACharacter::StopJumping);
-	PlayerInputComponent->BindAction("Nova", IE_Pressed, this, &ANovaStrikeCharacter::StartNova);
-	PlayerInputComponent->BindAction("Nova", IE_Released, this, &ANovaStrikeCharacter::EndNova);
-	PlayerInputComponent->BindAction("NovaBlast", IE_Released, this, &ANovaStrikeCharacter::OnNovaBlast);
 
 	PlayerInputComponent->BindAxis("Move Forward / Backward", this, &ANovaStrikeCharacter::MoveForward);
 	PlayerInputComponent->BindAxis("Move Right / Left", this, &ANovaStrikeCharacter::MoveRight);
@@ -99,15 +96,13 @@ void ANovaStrikeCharacter::StartJump()
 void ANovaStrikeCharacter::StartNova()
 {
 	OnStartNova();
-	CurrentCombatType = ECombatType::Nova;
-	InNovaMode = true;
+	CurrentCombatType = ECombatType::Gun;
 }
 
 void ANovaStrikeCharacter::EndNova()
 {
 	OnEndNova();
 	CurrentCombatType = ECombatType::Normal;
-	InNovaMode = false;
 }
 
 void ANovaStrikeCharacter::TurnAtRate(float Rate)
@@ -124,7 +119,7 @@ void ANovaStrikeCharacter::LookUpAtRate(float Rate)
 
 void ANovaStrikeCharacter::MoveForward(float Value)
 {
-	if ((Controller != nullptr) && (Value != 0.0f))
+	if ((Controller != nullptr) && (Value != 0.0f) && CanMove)
 	{
 		if (Value > 0.5f || Value < -0.5f) {
 			Moved = true;
@@ -141,7 +136,7 @@ void ANovaStrikeCharacter::MoveForward(float Value)
 
 void ANovaStrikeCharacter::MoveRight(float Value)
 {
-	if ( (Controller != nullptr) && (Value != 0.0f))
+	if ( (Controller != nullptr) && (Value != 0.0f) && CanMove)
 	{
 		if (Value > 0.5f || Value < -0.5f) {
 			Moved = true;

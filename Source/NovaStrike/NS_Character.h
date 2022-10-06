@@ -21,6 +21,9 @@ struct FAttack
 	// Enemy hit reaciton montage to use
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Attack")
 	UAnimMontage* EnemyHitReaction;
+	// Enemy hit reaciton montage to use in air
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Attack")
+	UAnimMontage* EnemyHitReactionInAir;
 	// CameraShake to use
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Attack")
 	TSubclassOf<UCameraShakeBase> CameraShake;
@@ -33,7 +36,7 @@ struct FAttack
 	// Knockback to apply to enemy
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Attack")
 	FVector2D Knockback;
-	// Damage to apply to enemy
+	// Damage to apply to enemy(in range between 0 to 1, with 1 being 100% of the enemies health)
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Attack")
 	float Damage;
 	// Gravity to apply to hit enemy and player
@@ -79,6 +82,12 @@ protected:
 
 	UPROPERTY(BlueprintReadOnly, Category="Movement")
 	bool bIsSprinting;
+	// Health float value between 0 and 1
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Combat")
+	float Health = 1;
+	// Temperature float value between 0 and 1
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Combat")
+	float Temperature = 0;
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Movement")
 	float SprintSpeed = 1100;
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Movement")
@@ -99,6 +108,10 @@ protected:
 	TArray<FAttack> AirAttacks;
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Combat")
 	TArray<FAttack> SprintAttacks;
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Combat")
+	TArray<FAttack> LaunchAttacks;
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Combat")
+	TArray<FAttack> AttacksToUse;
 	UPROPERTY(BlueprintReadWrite, Category = "Combat")
 	int CurrentAttackIndex;
 	UPROPERTY(BlueprintReadWrite, Category = "Combat")
@@ -109,8 +122,39 @@ protected:
 	bool InComboWindow;
 	UPROPERTY(BlueprintReadWrite, Category = "Combat")
 	bool Invincible;
-	UPROPERTY(EditAnywhere, Category = "Combat")
+	UPROPERTY(BlueprintReadWrite, Category = "Combat")
+	bool InAir;
+	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "Combat")
 	float ComboResetTime = 2.f;
+	UPROPERTY(BlueprintReadWrite, Category = "Combat")
+	bool Stunned;
+	// Time stunned after attack
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Combat")
+	float StunTime;
+
+	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "Camera")
+	float DefaultCameraTurnRate = 50.f;
+	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "Camera")
+	float AimingCameraTurnRate = 25.f;
+
+	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "Gun")
+	float WalkSpeedGunMode = 270.f;
+	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "Gun")
+	float GunLinetraceLength = 9999.f;
+	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "Gun")
+	UAnimMontage* FireMontage;
+	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "Gun")
+	float ExtractionSpeed = 0.25f;
+	UPROPERTY(BlueprintReadWrite, Category = "Gun")
+	AActor* AttachedActorGun;
+	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "Gun")
+	bool CanAttackDuringAiming;
+	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "Gun")
+	bool CanMoveWhenExtracting;
+	// how fast does the player switch between the gun and sword (anim interpolation speed)
+	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "Gun")
+	float AimChangeRate;
+
 
 	UPROPERTY(BlueprintReadOnly, Category = "Combat")
 	AActor* CurrentlyTargettedActor;
@@ -129,13 +173,29 @@ protected:
 	UFUNCTION(BlueprintCallable, Category = "General")
 	ANS_Character* GetNearestCharacter();
 	UFUNCTION(BlueprintCallable, Category = "Combat")
-	void Attack();
+	void Attack(TArray<FAttack> SpecifiedAttack);
 	UFUNCTION(BlueprintCallable, Category = "Combat")
 	void EndCombat();
 	UFUNCTION(BlueprintCallable, Category = "Combat")
 	FAttack GetCurrentAttack();
+	UFUNCTION(BlueprintCallable, Category = "Combat")
+	void Die();
+	UFUNCTION(BlueprintCallable, Category = "Combat")
+	void Stun();
+	UFUNCTION(BlueprintCallable, Category = "Combat")
+	void EndStun();
+	UFUNCTION(BlueprintCallable, Category = "Gun")
+	void BeginGunCombat();
+	UFUNCTION(BlueprintCallable, Category = "Gun")
+	void EndGunCombat();
+	UFUNCTION(BlueprintCallable, Category = "Gun")
+	void Fire();
+	UFUNCTION(BlueprintCallable, Category = "Gun")
+	void Extract();
+	UFUNCTION(BlueprintCallable, Category = "Gun")
+	void StopExtract();
 
-	UFUNCTION(BlueprintImplementableEvent, Category = "Camera")
+	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable, Category = "Camera")
 	void ZoomCamera(float DesiredArmLength);
 	UFUNCTION(BlueprintImplementableEvent, Category = "Combat")
 	void OnEnterCombatMode();
@@ -143,14 +203,28 @@ protected:
 	void OnEnterNeutralMode();
 	UFUNCTION(BlueprintImplementableEvent, Category = "Combat")
 	void OnTarget();
+	UFUNCTION(BlueprintImplementableEvent, Category = "Combat")
+	void OnDeath();
+	UFUNCTION(BlueprintImplementableEvent, Category = "Combat")
+	void OnStun();
+	UFUNCTION(BlueprintImplementableEvent, Category = "Combat")
+	void OnStunEnd();
+	UFUNCTION(BlueprintImplementableEvent, Category = "Gun")
+	void OnBeginGunMode();
+	UFUNCTION(BlueprintImplementableEvent, Category = "Gun")
+	void OnEndGunMode();
+	UFUNCTION(BlueprintImplementableEvent, Category = "Gun")
+	void OnFire();
+	UFUNCTION(BlueprintImplementableEvent, Category = "Gun")
+	void OnExtract();
+	UFUNCTION(BlueprintImplementableEvent, Category = "Gun")
+	void OnStopExtract();
 	UFUNCTION(BlueprintCallable, Category = "Combat")
 	void ContinueCombat();
 	UFUNCTION(BlueprintCallable, Category = "Combat")
 	void ResetCombo();
 	UFUNCTION(BlueprintCallable, Category = "Combat")
 	void TakeDamage(float DamageAmount, UAnimMontage* Montage, FVector Launch);
-	UFUNCTION(BlueprintCallable, Category = "Combat")
-	void EnterNovaMode();
 	UFUNCTION(BlueprintCallable, Category = "Combat")
 	void EnableSteering(float SteeringAmount);
 	UFUNCTION(BlueprintCallable, Category = "Combat")

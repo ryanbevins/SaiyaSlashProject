@@ -26,7 +26,7 @@ template<> NOVASTRIKE_API UEnum* StaticEnum<ECombatState>();
 
 #define FOREACH_ENUM_ECOMBATTYPE(op) \
 	op(ECombatType::Normal) \
-	op(ECombatType::Nova) 
+	op(ECombatType::Gun) 
 
 enum class ECombatType : uint8;
 template<> NOVASTRIKE_API UEnum* StaticEnum<ECombatType>();

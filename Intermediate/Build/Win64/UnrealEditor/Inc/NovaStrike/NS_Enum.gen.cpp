@@ -91,13 +91,13 @@ void EmptyLinkFunctionForGeneratedCodeNS_Enum() {}
 	};
 	const UECodeGen_Private::FEnumeratorParam Z_Construct_UEnum_NovaStrike_ECombatType_Statics::Enumerators[] = {
 		{ "ECombatType::Normal", (int64)ECombatType::Normal },
-		{ "ECombatType::Nova", (int64)ECombatType::Nova },
+		{ "ECombatType::Gun", (int64)ECombatType::Gun },
 	};
 #if WITH_METADATA
 	const UECodeGen_Private::FMetaDataPairParam Z_Construct_UEnum_NovaStrike_ECombatType_Statics::Enum_MetaDataParams[] = {
+		{ "Gun.Name", "ECombatType::Gun" },
 		{ "ModuleRelativePath", "NS_Enum.h" },
 		{ "Normal.Name", "ECombatType::Normal" },
-		{ "Nova.Name", "ECombatType::Nova" },
 	};
 #endif
 	const UECodeGen_Private::FEnumParams Z_Construct_UEnum_NovaStrike_ECombatType_Statics::EnumParams = {
@@ -126,9 +126,9 @@ void EmptyLinkFunctionForGeneratedCodeNS_Enum() {}
 	};
 	const FEnumRegisterCompiledInInfo Z_CompiledInDeferFile_FID_NovaStrike_Source_NovaStrike_NS_Enum_h_Statics::EnumInfo[] = {
 		{ ECombatState_StaticEnum, TEXT("ECombatState"), &Z_Registration_Info_UEnum_ECombatState, CONSTRUCT_RELOAD_VERSION_INFO(FEnumReloadVersionInfo, 468508430U) },
-		{ ECombatType_StaticEnum, TEXT("ECombatType"), &Z_Registration_Info_UEnum_ECombatType, CONSTRUCT_RELOAD_VERSION_INFO(FEnumReloadVersionInfo, 3440640274U) },
+		{ ECombatType_StaticEnum, TEXT("ECombatType"), &Z_Registration_Info_UEnum_ECombatType, CONSTRUCT_RELOAD_VERSION_INFO(FEnumReloadVersionInfo, 3966019754U) },
 	};
-	static FRegisterCompiledInInfo Z_CompiledInDeferFile_FID_NovaStrike_Source_NovaStrike_NS_Enum_h_589578721(TEXT("/Script/NovaStrike"),
+	static FRegisterCompiledInInfo Z_CompiledInDeferFile_FID_NovaStrike_Source_NovaStrike_NS_Enum_h_2929945899(TEXT("/Script/NovaStrike"),
 		nullptr, 0,
 		nullptr, 0,
 		Z_CompiledInDeferFile_FID_NovaStrike_Source_NovaStrike_NS_Enum_h_Statics::EnumInfo, UE_ARRAY_COUNT(Z_CompiledInDeferFile_FID_NovaStrike_Source_NovaStrike_NS_Enum_h_Statics::EnumInfo));

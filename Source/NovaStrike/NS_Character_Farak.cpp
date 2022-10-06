@@ -1,10 +1,10 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
+#include "NS_Character_Farak.h"
 #include "GameFramework/SpringArmComponent.h"
 #include "Camera/CameraComponent.h"
 #include "Kismet/KismetMathLibrary.h"
 #include "NS_Enum.h"
-#include "NS_Character_Farak.h"
 #include "GameFramework/CharacterMovementComponent.h"
 
 void ANS_Character_Farak::BeginPlay()
@@ -31,14 +31,12 @@ void ANS_Character_Farak::EnterCombatMode()
 {
 	Super::EnterCombatMode();
 	CurrentDesiredArmLength = CurrentDesiredArmLength + CombatArmLengthChange;
-	ZoomCamera(CurrentDesiredArmLength);
 }
 
 void ANS_Character_Farak::EnterNeutralMode()
 {
 	Super::EnterNeutralMode();
 	CurrentDesiredArmLength = CurrentDesiredArmLength - CombatArmLengthChange;
-	ZoomCamera(CurrentDesiredArmLength);
 }
 
 bool ANS_Character_Farak::TryBeginTargetting()

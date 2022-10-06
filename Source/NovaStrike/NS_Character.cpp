@@ -31,6 +31,7 @@ void ANS_Character::BeginPlay()
 	Super::BeginPlay();
 	UE_LOG(LogTemp, Warning, TEXT("Hello from NS_Character"));
 	DefaultGravity = GetCharacterMovement()->GravityScale;
+	TurnRateGamepad = DefaultCameraTurnRate;
 }
 
 void ANS_Character::Sprint()
@@ -38,7 +39,6 @@ void ANS_Character::Sprint()
 	bIsSprinting = true;
 	GetCharacterMovement()->MaxWalkSpeed = SprintSpeed;
 	CurrentDesiredArmLength = CurrentDesiredArmLength + ArmLengthDistanceChangeOnSprint;
-	ZoomCamera(CurrentDesiredArmLength);
 }
 
 void ANS_Character::StopSprint()
@@ -46,7 +46,6 @@ void ANS_Character::StopSprint()
 	bIsSprinting = false;
 	GetCharacterMovement()->MaxWalkSpeed = WalkSpeed;
 	CurrentDesiredArmLength = CurrentDesiredArmLength - ArmLengthDistanceChangeOnSprint;
-	ZoomCamera(CurrentDesiredArmLength);
 }
 
 TArray<ANS_Character*> ANS_Character::SphereTraceForCharacters(float Distance, float Radius, bool DrawDebug)
@@ -139,12 +138,6 @@ void ANS_Character::EnableSteering(float SteeringAmount)
 	GetCharacterMovement()->RotationRate = DefaultRotationRate * SteeringAmount;
 }
 
-void ANS_Character::EnterNovaMode()
-{
-	InNovaMode = true;
-	
-}
-
 bool ANS_Character::TryBeginTargetting()
 {
 	OnTarget();
@@ -169,9 +162,45 @@ void ANS_Character::ResetSteering()
 		GetCharacterMovement()->RotationRate = FRotator(0, 0, 0);
 }
 
+void ANS_Character::Die()
+{
+	OnDeath();
+	Destroy();
+}
+
 void ANS_Character::SetInvincible(bool NewInvincible)
 {
 	Invincible = NewInvincible;
+}
+
+void ANS_Character::BeginGunCombat()
+{
+	CurrentCombatType = ECombatType::Gun;
+	TurnRateGamepad = AimingCameraTurnRate;
+	OnBeginGunMode();
+}
+
+void ANS_Character::EndGunCombat()
+{
+	CurrentCombatType = ECombatType::Normal;
+	TurnRateGamepad = DefaultCameraTurnRate;
+	StopExtract();
+	OnEndGunMode();
+}
+
+void ANS_Character::Fire()
+{
+	OnFire();
+}
+
+void ANS_Character::Extract() {
+
+	OnExtract();
+}
+
+void ANS_Character::StopExtract()
+{
+	OnStopExtract();
 }
 
 void ANS_Character::ContinueCombat()
@@ -179,13 +208,13 @@ void ANS_Character::ContinueCombat()
 	if (InComboWindow) {
 		InComboWindow = false;
 		AwaitingAttackAnimFinish = false;
-		if ((Attacks.Num() - 1) != CurrentAttackIndex) {
+		if ((AttacksToUse.Num() - 1) != CurrentAttackIndex) {
 			CurrentAttackIndex++;
 		}
 		else CurrentAttackIndex = 0;
 		if (WaitingToAttack) {
 			WaitingToAttack = false;
-			Attack();
+			Attack(AttacksToUse);
 		}
 		IsAttacking = false;
 	}
@@ -204,34 +233,44 @@ void ANS_Character::ResetCombo()
 
 void ANS_Character::TakeDamage(float DamageAmount, UAnimMontage* Montage, FVector Launch)
 {
+	Stun();
 	GetMesh()->GetAnimInstance()->Montage_Play(Montage, 1, EMontagePlayReturnType::Duration, 0, true);
 	LaunchCharacter(Launch, false, false);
+	Health = Health - DamageAmount;
+	if (Health < 0) {
+		Die();
+	}
 }
 
-void ANS_Character::Attack()
+void ANS_Character::Attack(TArray<FAttack> SpecifiedAttacks)
 {
-	TArray<FAttack> AttacksToUse = GetCharacterMovement()->IsMovingOnGround() ? Attacks : AirAttacks;
-	if (bIsSprinting && GetCharacterMovement()->IsMovingOnGround()) { 
-		AttacksToUse = SprintAttacks;
-		CurrentAttackIndex = 0;
-	}
-	if (!AwaitingAttackAnimFinish) {
-		IsAttacking = true;
-		GetCharacterMovement()->MaxWalkSpeed = 0;
-		GetCharacterMovement()->RotationRate = FRotator(0,0,0);
-		if(CurrentlyTargettedActor || CurrentEnemiesInCombatWith.Num() > 0) {
-			AActor* ActorToTarget = CurrentlyTargettedActor ? CurrentlyTargettedActor : GetNearestCharacter();
-			FRotator LookAtRot = (UKismetMathLibrary::FindLookAtRotation(GetActorLocation(), ActorToTarget->GetActorLocation()));
-			FRotator NewRotator = FRotator(0, LookAtRot.Yaw, 0);
-			SetActorRotation(NewRotator);
+	if (!Stunned) {
+		if ((CurrentCombatType == ECombatType::Normal || CanAttackDuringAiming) && !AttachedActorGun) {
+			if (CurrentCombatType == ECombatType::Gun) EndGunCombat();
+			AttacksToUse = SpecifiedAttacks;
+			if (bIsSprinting && GetCharacterMovement()->IsMovingOnGround()) {
+				AttacksToUse = SprintAttacks;
+				CurrentAttackIndex = 0;
+			}
+			if (!AwaitingAttackAnimFinish) {
+				IsAttacking = true;
+				GetCharacterMovement()->MaxWalkSpeed = 0;
+				GetCharacterMovement()->RotationRate = FRotator(0, 0, 0);
+				if (CurrentlyTargettedActor || CurrentEnemiesInCombatWith.Num() > 0) {
+					AActor* ActorToTarget = CurrentlyTargettedActor ? CurrentlyTargettedActor : GetNearestCharacter();
+					FRotator LookAtRot = (UKismetMathLibrary::FindLookAtRotation(GetActorLocation(), ActorToTarget->GetActorLocation()));
+					FRotator NewRotator = FRotator(0, LookAtRot.Yaw, 0);
+					SetActorRotation(NewRotator);
+				}
+				GetMesh()->GetAnimInstance()->Montage_Play(AttacksToUse[CurrentAttackIndex].AttackMontage, 1, EMontagePlayReturnType::Duration, 0, true);
+				AwaitingAttackAnimFinish = true;
+				GetWorld()->GetTimerManager().SetTimer(AttackResetTimerHandle, this, &ANS_Character::ResetCombo, ComboResetTime);
+			}
+			else {
+				if (CurrentAttackIndex != AttacksToUse.Num() - 1 && InComboWindow)
+					WaitingToAttack = true;
+			}
 		}
-		GetMesh()->GetAnimInstance()->Montage_Play(AttacksToUse[CurrentAttackIndex].AttackMontage, 1, EMontagePlayReturnType::Duration, 0, true);
-		AwaitingAttackAnimFinish = true;
-		GetWorld()->GetTimerManager().SetTimer(AttackResetTimerHandle, this, &ANS_Character::ResetCombo, ComboResetTime);
-	}
-	else {
-		if(CurrentAttackIndex != AttacksToUse.Num()-1 && InComboWindow)
-			WaitingToAttack = true;
 	}
 }
 
@@ -251,10 +290,29 @@ void ANS_Character::EndCombat()
 
 FAttack ANS_Character::GetCurrentAttack() 
 {
-	TArray<FAttack> AttacksToUse = GetCharacterMovement()->IsMovingOnGround() ? Attacks : AirAttacks;
-	if (bIsSprinting && GetCharacterMovement()->IsMovingOnGround()) {
-		AttacksToUse = SprintAttacks;
+	//TArray<FAttack> AttacksToUse = GetCharacterMovement()->IsMovingOnGround() ? Attacks : AirAttacks;
+	FAttack Attack;
+	if (AttacksToUse.Num() > 0)
+	{
+		if (bIsSprinting && GetCharacterMovement()->IsMovingOnGround()) {
+			AttacksToUse = SprintAttacks;
+		}
+		return AttacksToUse[CurrentAttackIndex];
 	}
-	return AttacksToUse[CurrentAttackIndex];
+	return Attack;
+}
+
+void ANS_Character::Stun() 
+{
+	Stunned = true;
+	CanMove = false;
+	OnStun();
+}
+
+void ANS_Character::EndStun() 
+{
+	Stunned = false;
+	CanMove = true;
+	OnStunEnd();
 }
 

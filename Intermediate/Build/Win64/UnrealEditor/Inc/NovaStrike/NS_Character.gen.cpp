@@ -54,6 +54,10 @@ template<> NOVASTRIKE_API UScriptStruct* StaticStruct<FAttack>()
 #endif
 		static const UECodeGen_Private::FObjectPropertyParams NewProp_EnemyHitReaction;
 #if WITH_METADATA
+		static const UECodeGen_Private::FMetaDataPairParam NewProp_EnemyHitReactionInAir_MetaData[];
+#endif
+		static const UECodeGen_Private::FObjectPropertyParams NewProp_EnemyHitReactionInAir;
+#if WITH_METADATA
 		static const UECodeGen_Private::FMetaDataPairParam NewProp_CameraShake_MetaData[];
 #endif
 		static const UECodeGen_Private::FClassPropertyParams NewProp_CameraShake;
@@ -122,6 +126,15 @@ template<> NOVASTRIKE_API UScriptStruct* StaticStruct<FAttack>()
 #endif
 	const UECodeGen_Private::FObjectPropertyParams Z_Construct_UScriptStruct_FAttack_Statics::NewProp_EnemyHitReaction = { "EnemyHitReaction", nullptr, (EPropertyFlags)0x0010000000000005, UECodeGen_Private::EPropertyGenFlags::Object, RF_Public|RF_Transient|RF_MarkAsNative, 1, STRUCT_OFFSET(FAttack, EnemyHitReaction), Z_Construct_UClass_UAnimMontage_NoRegister, METADATA_PARAMS(Z_Construct_UScriptStruct_FAttack_Statics::NewProp_EnemyHitReaction_MetaData, UE_ARRAY_COUNT(Z_Construct_UScriptStruct_FAttack_Statics::NewProp_EnemyHitReaction_MetaData)) };
 #if WITH_METADATA
+	const UECodeGen_Private::FMetaDataPairParam Z_Construct_UScriptStruct_FAttack_Statics::NewProp_EnemyHitReactionInAir_MetaData[] = {
+		{ "Category", "Attack" },
+		{ "Comment", "// Enemy hit reaciton montage to use in air\n" },
+		{ "ModuleRelativePath", "NS_Character.h" },
+		{ "ToolTip", "Enemy hit reaciton montage to use in air" },
+	};
+#endif
+	const UECodeGen_Private::FObjectPropertyParams Z_Construct_UScriptStruct_FAttack_Statics::NewProp_EnemyHitReactionInAir = { "EnemyHitReactionInAir", nullptr, (EPropertyFlags)0x0010000000000005, UECodeGen_Private::EPropertyGenFlags::Object, RF_Public|RF_Transient|RF_MarkAsNative, 1, STRUCT_OFFSET(FAttack, EnemyHitReactionInAir), Z_Construct_UClass_UAnimMontage_NoRegister, METADATA_PARAMS(Z_Construct_UScriptStruct_FAttack_Statics::NewProp_EnemyHitReactionInAir_MetaData, UE_ARRAY_COUNT(Z_Construct_UScriptStruct_FAttack_Statics::NewProp_EnemyHitReactionInAir_MetaData)) };
+#if WITH_METADATA
 	const UECodeGen_Private::FMetaDataPairParam Z_Construct_UScriptStruct_FAttack_Statics::NewProp_CameraShake_MetaData[] = {
 		{ "Category", "Attack" },
 		{ "Comment", "// CameraShake to use\n" },
@@ -160,9 +173,9 @@ template<> NOVASTRIKE_API UScriptStruct* StaticStruct<FAttack>()
 #if WITH_METADATA
 	const UECodeGen_Private::FMetaDataPairParam Z_Construct_UScriptStruct_FAttack_Statics::NewProp_Damage_MetaData[] = {
 		{ "Category", "Attack" },
-		{ "Comment", "// Damage to apply to enemy\n" },
+		{ "Comment", "// Damage to apply to enemy(in range between 0 to 1, with 1 being 100% of the enemies health)\n" },
 		{ "ModuleRelativePath", "NS_Character.h" },
-		{ "ToolTip", "Damage to apply to enemy" },
+		{ "ToolTip", "Damage to apply to enemy(in range between 0 to 1, with 1 being 100% of the enemies health)" },
 	};
 #endif
 	const UECodeGen_Private::FFloatPropertyParams Z_Construct_UScriptStruct_FAttack_Statics::NewProp_Damage = { "Damage", nullptr, (EPropertyFlags)0x0010000000000005, UECodeGen_Private::EPropertyGenFlags::Float, RF_Public|RF_Transient|RF_MarkAsNative, 1, STRUCT_OFFSET(FAttack, Damage), METADATA_PARAMS(Z_Construct_UScriptStruct_FAttack_Statics::NewProp_Damage_MetaData, UE_ARRAY_COUNT(Z_Construct_UScriptStruct_FAttack_Statics::NewProp_Damage_MetaData)) };
@@ -205,6 +218,7 @@ template<> NOVASTRIKE_API UScriptStruct* StaticStruct<FAttack>()
 	const UECodeGen_Private::FPropertyParamsBase* const Z_Construct_UScriptStruct_FAttack_Statics::PropPointers[] = {
 		(const UECodeGen_Private::FPropertyParamsBase*)&Z_Construct_UScriptStruct_FAttack_Statics::NewProp_AttackMontage,
 		(const UECodeGen_Private::FPropertyParamsBase*)&Z_Construct_UScriptStruct_FAttack_Statics::NewProp_EnemyHitReaction,
+		(const UECodeGen_Private::FPropertyParamsBase*)&Z_Construct_UScriptStruct_FAttack_Statics::NewProp_EnemyHitReactionInAir,
 		(const UECodeGen_Private::FPropertyParamsBase*)&Z_Construct_UScriptStruct_FAttack_Statics::NewProp_CameraShake,
 		(const UECodeGen_Private::FPropertyParamsBase*)&Z_Construct_UScriptStruct_FAttack_Statics::NewProp_ForceFeedbackNotify,
 		(const UECodeGen_Private::FPropertyParamsBase*)&Z_Construct_UScriptStruct_FAttack_Statics::NewProp_LaunchForce,
@@ -266,13 +280,6 @@ template<> NOVASTRIKE_API UScriptStruct* StaticStruct<FAttack>()
 		P_THIS->EnableSteering(Z_Param_SteeringAmount);
 		P_NATIVE_END;
 	}
-	DEFINE_FUNCTION(ANS_Character::execEnterNovaMode)
-	{
-		P_FINISH;
-		P_NATIVE_BEGIN;
-		P_THIS->EnterNovaMode();
-		P_NATIVE_END;
-	}
 	DEFINE_FUNCTION(ANS_Character::execTakeDamage)
 	{
 		P_GET_PROPERTY(FFloatProperty,Z_Param_DamageAmount);
@@ -297,6 +304,62 @@ template<> NOVASTRIKE_API UScriptStruct* StaticStruct<FAttack>()
 		P_THIS->ContinueCombat();
 		P_NATIVE_END;
 	}
+	DEFINE_FUNCTION(ANS_Character::execStopExtract)
+	{
+		P_FINISH;
+		P_NATIVE_BEGIN;
+		P_THIS->StopExtract();
+		P_NATIVE_END;
+	}
+	DEFINE_FUNCTION(ANS_Character::execExtract)
+	{
+		P_FINISH;
+		P_NATIVE_BEGIN;
+		P_THIS->Extract();
+		P_NATIVE_END;
+	}
+	DEFINE_FUNCTION(ANS_Character::execFire)
+	{
+		P_FINISH;
+		P_NATIVE_BEGIN;
+		P_THIS->Fire();
+		P_NATIVE_END;
+	}
+	DEFINE_FUNCTION(ANS_Character::execEndGunCombat)
+	{
+		P_FINISH;
+		P_NATIVE_BEGIN;
+		P_THIS->EndGunCombat();
+		P_NATIVE_END;
+	}
+	DEFINE_FUNCTION(ANS_Character::execBeginGunCombat)
+	{
+		P_FINISH;
+		P_NATIVE_BEGIN;
+		P_THIS->BeginGunCombat();
+		P_NATIVE_END;
+	}
+	DEFINE_FUNCTION(ANS_Character::execEndStun)
+	{
+		P_FINISH;
+		P_NATIVE_BEGIN;
+		P_THIS->EndStun();
+		P_NATIVE_END;
+	}
+	DEFINE_FUNCTION(ANS_Character::execStun)
+	{
+		P_FINISH;
+		P_NATIVE_BEGIN;
+		P_THIS->Stun();
+		P_NATIVE_END;
+	}
+	DEFINE_FUNCTION(ANS_Character::execDie)
+	{
+		P_FINISH;
+		P_NATIVE_BEGIN;
+		P_THIS->Die();
+		P_NATIVE_END;
+	}
 	DEFINE_FUNCTION(ANS_Character::execGetCurrentAttack)
 	{
 		P_FINISH;
@@ -313,9 +376,10 @@ template<> NOVASTRIKE_API UScriptStruct* StaticStruct<FAttack>()
 	}
 	DEFINE_FUNCTION(ANS_Character::execAttack)
 	{
+		P_GET_TARRAY(FAttack,Z_Param_SpecifiedAttack);
 		P_FINISH;
 		P_NATIVE_BEGIN;
-		P_THIS->Attack();
+		P_THIS->Attack(Z_Param_SpecifiedAttack);
 		P_NATIVE_END;
 	}
 	DEFINE_FUNCTION(ANS_Character::execGetNearestCharacter)
@@ -370,6 +434,21 @@ template<> NOVASTRIKE_API UScriptStruct* StaticStruct<FAttack>()
 		P_THIS->SetCurrentCombatState(ECombatState(Z_Param_NewState));
 		P_NATIVE_END;
 	}
+	static FName NAME_ANS_Character_OnBeginGunMode = FName(TEXT("OnBeginGunMode"));
+	void ANS_Character::OnBeginGunMode()
+	{
+		ProcessEvent(FindFunctionChecked(NAME_ANS_Character_OnBeginGunMode),NULL);
+	}
+	static FName NAME_ANS_Character_OnDeath = FName(TEXT("OnDeath"));
+	void ANS_Character::OnDeath()
+	{
+		ProcessEvent(FindFunctionChecked(NAME_ANS_Character_OnDeath),NULL);
+	}
+	static FName NAME_ANS_Character_OnEndGunMode = FName(TEXT("OnEndGunMode"));
+	void ANS_Character::OnEndGunMode()
+	{
+		ProcessEvent(FindFunctionChecked(NAME_ANS_Character_OnEndGunMode),NULL);
+	}
 	static FName NAME_ANS_Character_OnEnterCombatMode = FName(TEXT("OnEnterCombatMode"));
 	void ANS_Character::OnEnterCombatMode()
 	{
@@ -379,6 +458,31 @@ template<> NOVASTRIKE_API UScriptStruct* StaticStruct<FAttack>()
 	void ANS_Character::OnEnterNeutralMode()
 	{
 		ProcessEvent(FindFunctionChecked(NAME_ANS_Character_OnEnterNeutralMode),NULL);
+	}
+	static FName NAME_ANS_Character_OnExtract = FName(TEXT("OnExtract"));
+	void ANS_Character::OnExtract()
+	{
+		ProcessEvent(FindFunctionChecked(NAME_ANS_Character_OnExtract),NULL);
+	}
+	static FName NAME_ANS_Character_OnFire = FName(TEXT("OnFire"));
+	void ANS_Character::OnFire()
+	{
+		ProcessEvent(FindFunctionChecked(NAME_ANS_Character_OnFire),NULL);
+	}
+	static FName NAME_ANS_Character_OnStopExtract = FName(TEXT("OnStopExtract"));
+	void ANS_Character::OnStopExtract()
+	{
+		ProcessEvent(FindFunctionChecked(NAME_ANS_Character_OnStopExtract),NULL);
+	}
+	static FName NAME_ANS_Character_OnStun = FName(TEXT("OnStun"));
+	void ANS_Character::OnStun()
+	{
+		ProcessEvent(FindFunctionChecked(NAME_ANS_Character_OnStun),NULL);
+	}
+	static FName NAME_ANS_Character_OnStunEnd = FName(TEXT("OnStunEnd"));
+	void ANS_Character::OnStunEnd()
+	{
+		ProcessEvent(FindFunctionChecked(NAME_ANS_Character_OnStunEnd),NULL);
 	}
 	static FName NAME_ANS_Character_OnTarget = FName(TEXT("OnTarget"));
 	void ANS_Character::OnTarget()
@@ -398,10 +502,15 @@ template<> NOVASTRIKE_API UScriptStruct* StaticStruct<FAttack>()
 		static const FNameNativePtrPair Funcs[] = {
 			{ "Attack", &ANS_Character::execAttack },
 			{ "AttackBoxOverlapBegin", &ANS_Character::execAttackBoxOverlapBegin },
+			{ "BeginGunCombat", &ANS_Character::execBeginGunCombat },
 			{ "ContinueCombat", &ANS_Character::execContinueCombat },
+			{ "Die", &ANS_Character::execDie },
 			{ "EnableSteering", &ANS_Character::execEnableSteering },
 			{ "EndCombat", &ANS_Character::execEndCombat },
-			{ "EnterNovaMode", &ANS_Character::execEnterNovaMode },
+			{ "EndGunCombat", &ANS_Character::execEndGunCombat },
+			{ "EndStun", &ANS_Character::execEndStun },
+			{ "Extract", &ANS_Character::execExtract },
+			{ "Fire", &ANS_Character::execFire },
 			{ "GetCurrentAttack", &ANS_Character::execGetCurrentAttack },
 			{ "GetNearestCharacter", &ANS_Character::execGetNearestCharacter },
 			{ "ResetCombo", &ANS_Character::execResetCombo },
@@ -410,7 +519,9 @@ template<> NOVASTRIKE_API UScriptStruct* StaticStruct<FAttack>()
 			{ "SetInvincible", &ANS_Character::execSetInvincible },
 			{ "SphereTraceForCharacters", &ANS_Character::execSphereTraceForCharacters },
 			{ "Sprint", &ANS_Character::execSprint },
+			{ "StopExtract", &ANS_Character::execStopExtract },
 			{ "StopSprint", &ANS_Character::execStopSprint },
+			{ "Stun", &ANS_Character::execStun },
 			{ "TakeDamage", &ANS_Character::execTakeDamage },
 			{ "TryBeginTargetting", &ANS_Character::execTryBeginTargetting },
 		};
@@ -418,10 +529,23 @@ template<> NOVASTRIKE_API UScriptStruct* StaticStruct<FAttack>()
 	}
 	struct Z_Construct_UFunction_ANS_Character_Attack_Statics
 	{
+		struct NS_Character_eventAttack_Parms
+		{
+			TArray<FAttack> SpecifiedAttack;
+		};
+		static const UECodeGen_Private::FStructPropertyParams NewProp_SpecifiedAttack_Inner;
+		static const UECodeGen_Private::FArrayPropertyParams NewProp_SpecifiedAttack;
+		static const UECodeGen_Private::FPropertyParamsBase* const PropPointers[];
 #if WITH_METADATA
 		static const UECodeGen_Private::FMetaDataPairParam Function_MetaDataParams[];
 #endif
 		static const UECodeGen_Private::FFunctionParams FuncParams;
+	};
+	const UECodeGen_Private::FStructPropertyParams Z_Construct_UFunction_ANS_Character_Attack_Statics::NewProp_SpecifiedAttack_Inner = { "SpecifiedAttack", nullptr, (EPropertyFlags)0x0000000000000000, UECodeGen_Private::EPropertyGenFlags::Struct, RF_Public|RF_Transient|RF_MarkAsNative, 1, 0, Z_Construct_UScriptStruct_FAttack, METADATA_PARAMS(nullptr, 0) }; // 4286849046
+	const UECodeGen_Private::FArrayPropertyParams Z_Construct_UFunction_ANS_Character_Attack_Statics::NewProp_SpecifiedAttack = { "SpecifiedAttack", nullptr, (EPropertyFlags)0x0010000000000080, UECodeGen_Private::EPropertyGenFlags::Array, RF_Public|RF_Transient|RF_MarkAsNative, 1, STRUCT_OFFSET(NS_Character_eventAttack_Parms, SpecifiedAttack), EArrayPropertyFlags::None, METADATA_PARAMS(nullptr, 0) }; // 4286849046
+	const UECodeGen_Private::FPropertyParamsBase* const Z_Construct_UFunction_ANS_Character_Attack_Statics::PropPointers[] = {
+		(const UECodeGen_Private::FPropertyParamsBase*)&Z_Construct_UFunction_ANS_Character_Attack_Statics::NewProp_SpecifiedAttack_Inner,
+		(const UECodeGen_Private::FPropertyParamsBase*)&Z_Construct_UFunction_ANS_Character_Attack_Statics::NewProp_SpecifiedAttack,
 	};
 #if WITH_METADATA
 	const UECodeGen_Private::FMetaDataPairParam Z_Construct_UFunction_ANS_Character_Attack_Statics::Function_MetaDataParams[] = {
@@ -429,7 +553,7 @@ template<> NOVASTRIKE_API UScriptStruct* StaticStruct<FAttack>()
 		{ "ModuleRelativePath", "NS_Character.h" },
 	};
 #endif
-	const UECodeGen_Private::FFunctionParams Z_Construct_UFunction_ANS_Character_Attack_Statics::FuncParams = { (UObject*(*)())Z_Construct_UClass_ANS_Character, nullptr, "Attack", nullptr, nullptr, 0, nullptr, 0, RF_Public|RF_Transient|RF_MarkAsNative, (EFunctionFlags)0x04080401, 0, 0, METADATA_PARAMS(Z_Construct_UFunction_ANS_Character_Attack_Statics::Function_MetaDataParams, UE_ARRAY_COUNT(Z_Construct_UFunction_ANS_Character_Attack_Statics::Function_MetaDataParams)) };
+	const UECodeGen_Private::FFunctionParams Z_Construct_UFunction_ANS_Character_Attack_Statics::FuncParams = { (UObject*(*)())Z_Construct_UClass_ANS_Character, nullptr, "Attack", nullptr, nullptr, sizeof(Z_Construct_UFunction_ANS_Character_Attack_Statics::NS_Character_eventAttack_Parms), Z_Construct_UFunction_ANS_Character_Attack_Statics::PropPointers, UE_ARRAY_COUNT(Z_Construct_UFunction_ANS_Character_Attack_Statics::PropPointers), RF_Public|RF_Transient|RF_MarkAsNative, (EFunctionFlags)0x04080401, 0, 0, METADATA_PARAMS(Z_Construct_UFunction_ANS_Character_Attack_Statics::Function_MetaDataParams, UE_ARRAY_COUNT(Z_Construct_UFunction_ANS_Character_Attack_Statics::Function_MetaDataParams)) };
 	UFunction* Z_Construct_UFunction_ANS_Character_Attack()
 	{
 		static UFunction* ReturnFunction = nullptr;
@@ -520,6 +644,29 @@ template<> NOVASTRIKE_API UScriptStruct* StaticStruct<FAttack>()
 		}
 		return ReturnFunction;
 	}
+	struct Z_Construct_UFunction_ANS_Character_BeginGunCombat_Statics
+	{
+#if WITH_METADATA
+		static const UECodeGen_Private::FMetaDataPairParam Function_MetaDataParams[];
+#endif
+		static const UECodeGen_Private::FFunctionParams FuncParams;
+	};
+#if WITH_METADATA
+	const UECodeGen_Private::FMetaDataPairParam Z_Construct_UFunction_ANS_Character_BeginGunCombat_Statics::Function_MetaDataParams[] = {
+		{ "Category", "Gun" },
+		{ "ModuleRelativePath", "NS_Character.h" },
+	};
+#endif
+	const UECodeGen_Private::FFunctionParams Z_Construct_UFunction_ANS_Character_BeginGunCombat_Statics::FuncParams = { (UObject*(*)())Z_Construct_UClass_ANS_Character, nullptr, "BeginGunCombat", nullptr, nullptr, 0, nullptr, 0, RF_Public|RF_Transient|RF_MarkAsNative, (EFunctionFlags)0x04080401, 0, 0, METADATA_PARAMS(Z_Construct_UFunction_ANS_Character_BeginGunCombat_Statics::Function_MetaDataParams, UE_ARRAY_COUNT(Z_Construct_UFunction_ANS_Character_BeginGunCombat_Statics::Function_MetaDataParams)) };
+	UFunction* Z_Construct_UFunction_ANS_Character_BeginGunCombat()
+	{
+		static UFunction* ReturnFunction = nullptr;
+		if (!ReturnFunction)
+		{
+			UECodeGen_Private::ConstructUFunction(&ReturnFunction, Z_Construct_UFunction_ANS_Character_BeginGunCombat_Statics::FuncParams);
+		}
+		return ReturnFunction;
+	}
 	struct Z_Construct_UFunction_ANS_Character_ContinueCombat_Statics
 	{
 #if WITH_METADATA
@@ -540,6 +687,29 @@ template<> NOVASTRIKE_API UScriptStruct* StaticStruct<FAttack>()
 		if (!ReturnFunction)
 		{
 			UECodeGen_Private::ConstructUFunction(&ReturnFunction, Z_Construct_UFunction_ANS_Character_ContinueCombat_Statics::FuncParams);
+		}
+		return ReturnFunction;
+	}
+	struct Z_Construct_UFunction_ANS_Character_Die_Statics
+	{
+#if WITH_METADATA
+		static const UECodeGen_Private::FMetaDataPairParam Function_MetaDataParams[];
+#endif
+		static const UECodeGen_Private::FFunctionParams FuncParams;
+	};
+#if WITH_METADATA
+	const UECodeGen_Private::FMetaDataPairParam Z_Construct_UFunction_ANS_Character_Die_Statics::Function_MetaDataParams[] = {
+		{ "Category", "Combat" },
+		{ "ModuleRelativePath", "NS_Character.h" },
+	};
+#endif
+	const UECodeGen_Private::FFunctionParams Z_Construct_UFunction_ANS_Character_Die_Statics::FuncParams = { (UObject*(*)())Z_Construct_UClass_ANS_Character, nullptr, "Die", nullptr, nullptr, 0, nullptr, 0, RF_Public|RF_Transient|RF_MarkAsNative, (EFunctionFlags)0x04080401, 0, 0, METADATA_PARAMS(Z_Construct_UFunction_ANS_Character_Die_Statics::Function_MetaDataParams, UE_ARRAY_COUNT(Z_Construct_UFunction_ANS_Character_Die_Statics::Function_MetaDataParams)) };
+	UFunction* Z_Construct_UFunction_ANS_Character_Die()
+	{
+		static UFunction* ReturnFunction = nullptr;
+		if (!ReturnFunction)
+		{
+			UECodeGen_Private::ConstructUFunction(&ReturnFunction, Z_Construct_UFunction_ANS_Character_Die_Statics::FuncParams);
 		}
 		return ReturnFunction;
 	}
@@ -599,7 +769,7 @@ template<> NOVASTRIKE_API UScriptStruct* StaticStruct<FAttack>()
 		}
 		return ReturnFunction;
 	}
-	struct Z_Construct_UFunction_ANS_Character_EnterNovaMode_Statics
+	struct Z_Construct_UFunction_ANS_Character_EndGunCombat_Statics
 	{
 #if WITH_METADATA
 		static const UECodeGen_Private::FMetaDataPairParam Function_MetaDataParams[];
@@ -607,18 +777,87 @@ template<> NOVASTRIKE_API UScriptStruct* StaticStruct<FAttack>()
 		static const UECodeGen_Private::FFunctionParams FuncParams;
 	};
 #if WITH_METADATA
-	const UECodeGen_Private::FMetaDataPairParam Z_Construct_UFunction_ANS_Character_EnterNovaMode_Statics::Function_MetaDataParams[] = {
-		{ "Category", "Combat" },
+	const UECodeGen_Private::FMetaDataPairParam Z_Construct_UFunction_ANS_Character_EndGunCombat_Statics::Function_MetaDataParams[] = {
+		{ "Category", "Gun" },
 		{ "ModuleRelativePath", "NS_Character.h" },
 	};
 #endif
-	const UECodeGen_Private::FFunctionParams Z_Construct_UFunction_ANS_Character_EnterNovaMode_Statics::FuncParams = { (UObject*(*)())Z_Construct_UClass_ANS_Character, nullptr, "EnterNovaMode", nullptr, nullptr, 0, nullptr, 0, RF_Public|RF_Transient|RF_MarkAsNative, (EFunctionFlags)0x04080401, 0, 0, METADATA_PARAMS(Z_Construct_UFunction_ANS_Character_EnterNovaMode_Statics::Function_MetaDataParams, UE_ARRAY_COUNT(Z_Construct_UFunction_ANS_Character_EnterNovaMode_Statics::Function_MetaDataParams)) };
-	UFunction* Z_Construct_UFunction_ANS_Character_EnterNovaMode()
+	const UECodeGen_Private::FFunctionParams Z_Construct_UFunction_ANS_Character_EndGunCombat_Statics::FuncParams = { (UObject*(*)())Z_Construct_UClass_ANS_Character, nullptr, "EndGunCombat", nullptr, nullptr, 0, nullptr, 0, RF_Public|RF_Transient|RF_MarkAsNative, (EFunctionFlags)0x04080401, 0, 0, METADATA_PARAMS(Z_Construct_UFunction_ANS_Character_EndGunCombat_Statics::Function_MetaDataParams, UE_ARRAY_COUNT(Z_Construct_UFunction_ANS_Character_EndGunCombat_Statics::Function_MetaDataParams)) };
+	UFunction* Z_Construct_UFunction_ANS_Character_EndGunCombat()
 	{
 		static UFunction* ReturnFunction = nullptr;
 		if (!ReturnFunction)
 		{
-			UECodeGen_Private::ConstructUFunction(&ReturnFunction, Z_Construct_UFunction_ANS_Character_EnterNovaMode_Statics::FuncParams);
+			UECodeGen_Private::ConstructUFunction(&ReturnFunction, Z_Construct_UFunction_ANS_Character_EndGunCombat_Statics::FuncParams);
+		}
+		return ReturnFunction;
+	}
+	struct Z_Construct_UFunction_ANS_Character_EndStun_Statics
+	{
+#if WITH_METADATA
+		static const UECodeGen_Private::FMetaDataPairParam Function_MetaDataParams[];
+#endif
+		static const UECodeGen_Private::FFunctionParams FuncParams;
+	};
+#if WITH_METADATA
+	const UECodeGen_Private::FMetaDataPairParam Z_Construct_UFunction_ANS_Character_EndStun_Statics::Function_MetaDataParams[] = {
+		{ "Category", "Combat" },
+		{ "ModuleRelativePath", "NS_Character.h" },
+	};
+#endif
+	const UECodeGen_Private::FFunctionParams Z_Construct_UFunction_ANS_Character_EndStun_Statics::FuncParams = { (UObject*(*)())Z_Construct_UClass_ANS_Character, nullptr, "EndStun", nullptr, nullptr, 0, nullptr, 0, RF_Public|RF_Transient|RF_MarkAsNative, (EFunctionFlags)0x04080401, 0, 0, METADATA_PARAMS(Z_Construct_UFunction_ANS_Character_EndStun_Statics::Function_MetaDataParams, UE_ARRAY_COUNT(Z_Construct_UFunction_ANS_Character_EndStun_Statics::Function_MetaDataParams)) };
+	UFunction* Z_Construct_UFunction_ANS_Character_EndStun()
+	{
+		static UFunction* ReturnFunction = nullptr;
+		if (!ReturnFunction)
+		{
+			UECodeGen_Private::ConstructUFunction(&ReturnFunction, Z_Construct_UFunction_ANS_Character_EndStun_Statics::FuncParams);
+		}
+		return ReturnFunction;
+	}
+	struct Z_Construct_UFunction_ANS_Character_Extract_Statics
+	{
+#if WITH_METADATA
+		static const UECodeGen_Private::FMetaDataPairParam Function_MetaDataParams[];
+#endif
+		static const UECodeGen_Private::FFunctionParams FuncParams;
+	};
+#if WITH_METADATA
+	const UECodeGen_Private::FMetaDataPairParam Z_Construct_UFunction_ANS_Character_Extract_Statics::Function_MetaDataParams[] = {
+		{ "Category", "Gun" },
+		{ "ModuleRelativePath", "NS_Character.h" },
+	};
+#endif
+	const UECodeGen_Private::FFunctionParams Z_Construct_UFunction_ANS_Character_Extract_Statics::FuncParams = { (UObject*(*)())Z_Construct_UClass_ANS_Character, nullptr, "Extract", nullptr, nullptr, 0, nullptr, 0, RF_Public|RF_Transient|RF_MarkAsNative, (EFunctionFlags)0x04080401, 0, 0, METADATA_PARAMS(Z_Construct_UFunction_ANS_Character_Extract_Statics::Function_MetaDataParams, UE_ARRAY_COUNT(Z_Construct_UFunction_ANS_Character_Extract_Statics::Function_MetaDataParams)) };
+	UFunction* Z_Construct_UFunction_ANS_Character_Extract()
+	{
+		static UFunction* ReturnFunction = nullptr;
+		if (!ReturnFunction)
+		{
+			UECodeGen_Private::ConstructUFunction(&ReturnFunction, Z_Construct_UFunction_ANS_Character_Extract_Statics::FuncParams);
+		}
+		return ReturnFunction;
+	}
+	struct Z_Construct_UFunction_ANS_Character_Fire_Statics
+	{
+#if WITH_METADATA
+		static const UECodeGen_Private::FMetaDataPairParam Function_MetaDataParams[];
+#endif
+		static const UECodeGen_Private::FFunctionParams FuncParams;
+	};
+#if WITH_METADATA
+	const UECodeGen_Private::FMetaDataPairParam Z_Construct_UFunction_ANS_Character_Fire_Statics::Function_MetaDataParams[] = {
+		{ "Category", "Gun" },
+		{ "ModuleRelativePath", "NS_Character.h" },
+	};
+#endif
+	const UECodeGen_Private::FFunctionParams Z_Construct_UFunction_ANS_Character_Fire_Statics::FuncParams = { (UObject*(*)())Z_Construct_UClass_ANS_Character, nullptr, "Fire", nullptr, nullptr, 0, nullptr, 0, RF_Public|RF_Transient|RF_MarkAsNative, (EFunctionFlags)0x04080401, 0, 0, METADATA_PARAMS(Z_Construct_UFunction_ANS_Character_Fire_Statics::Function_MetaDataParams, UE_ARRAY_COUNT(Z_Construct_UFunction_ANS_Character_Fire_Statics::Function_MetaDataParams)) };
+	UFunction* Z_Construct_UFunction_ANS_Character_Fire()
+	{
+		static UFunction* ReturnFunction = nullptr;
+		if (!ReturnFunction)
+		{
+			UECodeGen_Private::ConstructUFunction(&ReturnFunction, Z_Construct_UFunction_ANS_Character_Fire_Statics::FuncParams);
 		}
 		return ReturnFunction;
 	}
@@ -635,7 +874,7 @@ template<> NOVASTRIKE_API UScriptStruct* StaticStruct<FAttack>()
 #endif
 		static const UECodeGen_Private::FFunctionParams FuncParams;
 	};
-	const UECodeGen_Private::FStructPropertyParams Z_Construct_UFunction_ANS_Character_GetCurrentAttack_Statics::NewProp_ReturnValue = { "ReturnValue", nullptr, (EPropertyFlags)0x0010000000000580, UECodeGen_Private::EPropertyGenFlags::Struct, RF_Public|RF_Transient|RF_MarkAsNative, 1, STRUCT_OFFSET(NS_Character_eventGetCurrentAttack_Parms, ReturnValue), Z_Construct_UScriptStruct_FAttack, METADATA_PARAMS(nullptr, 0) }; // 1367983484
+	const UECodeGen_Private::FStructPropertyParams Z_Construct_UFunction_ANS_Character_GetCurrentAttack_Statics::NewProp_ReturnValue = { "ReturnValue", nullptr, (EPropertyFlags)0x0010000000000580, UECodeGen_Private::EPropertyGenFlags::Struct, RF_Public|RF_Transient|RF_MarkAsNative, 1, STRUCT_OFFSET(NS_Character_eventGetCurrentAttack_Parms, ReturnValue), Z_Construct_UScriptStruct_FAttack, METADATA_PARAMS(nullptr, 0) }; // 4286849046
 	const UECodeGen_Private::FPropertyParamsBase* const Z_Construct_UFunction_ANS_Character_GetCurrentAttack_Statics::PropPointers[] = {
 		(const UECodeGen_Private::FPropertyParamsBase*)&Z_Construct_UFunction_ANS_Character_GetCurrentAttack_Statics::NewProp_ReturnValue,
 	};
@@ -688,6 +927,75 @@ template<> NOVASTRIKE_API UScriptStruct* StaticStruct<FAttack>()
 		}
 		return ReturnFunction;
 	}
+	struct Z_Construct_UFunction_ANS_Character_OnBeginGunMode_Statics
+	{
+#if WITH_METADATA
+		static const UECodeGen_Private::FMetaDataPairParam Function_MetaDataParams[];
+#endif
+		static const UECodeGen_Private::FFunctionParams FuncParams;
+	};
+#if WITH_METADATA
+	const UECodeGen_Private::FMetaDataPairParam Z_Construct_UFunction_ANS_Character_OnBeginGunMode_Statics::Function_MetaDataParams[] = {
+		{ "Category", "Gun" },
+		{ "ModuleRelativePath", "NS_Character.h" },
+	};
+#endif
+	const UECodeGen_Private::FFunctionParams Z_Construct_UFunction_ANS_Character_OnBeginGunMode_Statics::FuncParams = { (UObject*(*)())Z_Construct_UClass_ANS_Character, nullptr, "OnBeginGunMode", nullptr, nullptr, 0, nullptr, 0, RF_Public|RF_Transient|RF_MarkAsNative, (EFunctionFlags)0x08080800, 0, 0, METADATA_PARAMS(Z_Construct_UFunction_ANS_Character_OnBeginGunMode_Statics::Function_MetaDataParams, UE_ARRAY_COUNT(Z_Construct_UFunction_ANS_Character_OnBeginGunMode_Statics::Function_MetaDataParams)) };
+	UFunction* Z_Construct_UFunction_ANS_Character_OnBeginGunMode()
+	{
+		static UFunction* ReturnFunction = nullptr;
+		if (!ReturnFunction)
+		{
+			UECodeGen_Private::ConstructUFunction(&ReturnFunction, Z_Construct_UFunction_ANS_Character_OnBeginGunMode_Statics::FuncParams);
+		}
+		return ReturnFunction;
+	}
+	struct Z_Construct_UFunction_ANS_Character_OnDeath_Statics
+	{
+#if WITH_METADATA
+		static const UECodeGen_Private::FMetaDataPairParam Function_MetaDataParams[];
+#endif
+		static const UECodeGen_Private::FFunctionParams FuncParams;
+	};
+#if WITH_METADATA
+	const UECodeGen_Private::FMetaDataPairParam Z_Construct_UFunction_ANS_Character_OnDeath_Statics::Function_MetaDataParams[] = {
+		{ "Category", "Combat" },
+		{ "ModuleRelativePath", "NS_Character.h" },
+	};
+#endif
+	const UECodeGen_Private::FFunctionParams Z_Construct_UFunction_ANS_Character_OnDeath_Statics::FuncParams = { (UObject*(*)())Z_Construct_UClass_ANS_Character, nullptr, "OnDeath", nullptr, nullptr, 0, nullptr, 0, RF_Public|RF_Transient|RF_MarkAsNative, (EFunctionFlags)0x08080800, 0, 0, METADATA_PARAMS(Z_Construct_UFunction_ANS_Character_OnDeath_Statics::Function_MetaDataParams, UE_ARRAY_COUNT(Z_Construct_UFunction_ANS_Character_OnDeath_Statics::Function_MetaDataParams)) };
+	UFunction* Z_Construct_UFunction_ANS_Character_OnDeath()
+	{
+		static UFunction* ReturnFunction = nullptr;
+		if (!ReturnFunction)
+		{
+			UECodeGen_Private::ConstructUFunction(&ReturnFunction, Z_Construct_UFunction_ANS_Character_OnDeath_Statics::FuncParams);
+		}
+		return ReturnFunction;
+	}
+	struct Z_Construct_UFunction_ANS_Character_OnEndGunMode_Statics
+	{
+#if WITH_METADATA
+		static const UECodeGen_Private::FMetaDataPairParam Function_MetaDataParams[];
+#endif
+		static const UECodeGen_Private::FFunctionParams FuncParams;
+	};
+#if WITH_METADATA
+	const UECodeGen_Private::FMetaDataPairParam Z_Construct_UFunction_ANS_Character_OnEndGunMode_Statics::Function_MetaDataParams[] = {
+		{ "Category", "Gun" },
+		{ "ModuleRelativePath", "NS_Character.h" },
+	};
+#endif
+	const UECodeGen_Private::FFunctionParams Z_Construct_UFunction_ANS_Character_OnEndGunMode_Statics::FuncParams = { (UObject*(*)())Z_Construct_UClass_ANS_Character, nullptr, "OnEndGunMode", nullptr, nullptr, 0, nullptr, 0, RF_Public|RF_Transient|RF_MarkAsNative, (EFunctionFlags)0x08080800, 0, 0, METADATA_PARAMS(Z_Construct_UFunction_ANS_Character_OnEndGunMode_Statics::Function_MetaDataParams, UE_ARRAY_COUNT(Z_Construct_UFunction_ANS_Character_OnEndGunMode_Statics::Function_MetaDataParams)) };
+	UFunction* Z_Construct_UFunction_ANS_Character_OnEndGunMode()
+	{
+		static UFunction* ReturnFunction = nullptr;
+		if (!ReturnFunction)
+		{
+			UECodeGen_Private::ConstructUFunction(&ReturnFunction, Z_Construct_UFunction_ANS_Character_OnEndGunMode_Statics::FuncParams);
+		}
+		return ReturnFunction;
+	}
 	struct Z_Construct_UFunction_ANS_Character_OnEnterCombatMode_Statics
 	{
 #if WITH_METADATA
@@ -731,6 +1039,121 @@ template<> NOVASTRIKE_API UScriptStruct* StaticStruct<FAttack>()
 		if (!ReturnFunction)
 		{
 			UECodeGen_Private::ConstructUFunction(&ReturnFunction, Z_Construct_UFunction_ANS_Character_OnEnterNeutralMode_Statics::FuncParams);
+		}
+		return ReturnFunction;
+	}
+	struct Z_Construct_UFunction_ANS_Character_OnExtract_Statics
+	{
+#if WITH_METADATA
+		static const UECodeGen_Private::FMetaDataPairParam Function_MetaDataParams[];
+#endif
+		static const UECodeGen_Private::FFunctionParams FuncParams;
+	};
+#if WITH_METADATA
+	const UECodeGen_Private::FMetaDataPairParam Z_Construct_UFunction_ANS_Character_OnExtract_Statics::Function_MetaDataParams[] = {
+		{ "Category", "Gun" },
+		{ "ModuleRelativePath", "NS_Character.h" },
+	};
+#endif
+	const UECodeGen_Private::FFunctionParams Z_Construct_UFunction_ANS_Character_OnExtract_Statics::FuncParams = { (UObject*(*)())Z_Construct_UClass_ANS_Character, nullptr, "OnExtract", nullptr, nullptr, 0, nullptr, 0, RF_Public|RF_Transient|RF_MarkAsNative, (EFunctionFlags)0x08080800, 0, 0, METADATA_PARAMS(Z_Construct_UFunction_ANS_Character_OnExtract_Statics::Function_MetaDataParams, UE_ARRAY_COUNT(Z_Construct_UFunction_ANS_Character_OnExtract_Statics::Function_MetaDataParams)) };
+	UFunction* Z_Construct_UFunction_ANS_Character_OnExtract()
+	{
+		static UFunction* ReturnFunction = nullptr;
+		if (!ReturnFunction)
+		{
+			UECodeGen_Private::ConstructUFunction(&ReturnFunction, Z_Construct_UFunction_ANS_Character_OnExtract_Statics::FuncParams);
+		}
+		return ReturnFunction;
+	}
+	struct Z_Construct_UFunction_ANS_Character_OnFire_Statics
+	{
+#if WITH_METADATA
+		static const UECodeGen_Private::FMetaDataPairParam Function_MetaDataParams[];
+#endif
+		static const UECodeGen_Private::FFunctionParams FuncParams;
+	};
+#if WITH_METADATA
+	const UECodeGen_Private::FMetaDataPairParam Z_Construct_UFunction_ANS_Character_OnFire_Statics::Function_MetaDataParams[] = {
+		{ "Category", "Gun" },
+		{ "ModuleRelativePath", "NS_Character.h" },
+	};
+#endif
+	const UECodeGen_Private::FFunctionParams Z_Construct_UFunction_ANS_Character_OnFire_Statics::FuncParams = { (UObject*(*)())Z_Construct_UClass_ANS_Character, nullptr, "OnFire", nullptr, nullptr, 0, nullptr, 0, RF_Public|RF_Transient|RF_MarkAsNative, (EFunctionFlags)0x08080800, 0, 0, METADATA_PARAMS(Z_Construct_UFunction_ANS_Character_OnFire_Statics::Function_MetaDataParams, UE_ARRAY_COUNT(Z_Construct_UFunction_ANS_Character_OnFire_Statics::Function_MetaDataParams)) };
+	UFunction* Z_Construct_UFunction_ANS_Character_OnFire()
+	{
+		static UFunction* ReturnFunction = nullptr;
+		if (!ReturnFunction)
+		{
+			UECodeGen_Private::ConstructUFunction(&ReturnFunction, Z_Construct_UFunction_ANS_Character_OnFire_Statics::FuncParams);
+		}
+		return ReturnFunction;
+	}
+	struct Z_Construct_UFunction_ANS_Character_OnStopExtract_Statics
+	{
+#if WITH_METADATA
+		static const UECodeGen_Private::FMetaDataPairParam Function_MetaDataParams[];
+#endif
+		static const UECodeGen_Private::FFunctionParams FuncParams;
+	};
+#if WITH_METADATA
+	const UECodeGen_Private::FMetaDataPairParam Z_Construct_UFunction_ANS_Character_OnStopExtract_Statics::Function_MetaDataParams[] = {
+		{ "Category", "Gun" },
+		{ "ModuleRelativePath", "NS_Character.h" },
+	};
+#endif
+	const UECodeGen_Private::FFunctionParams Z_Construct_UFunction_ANS_Character_OnStopExtract_Statics::FuncParams = { (UObject*(*)())Z_Construct_UClass_ANS_Character, nullptr, "OnStopExtract", nullptr, nullptr, 0, nullptr, 0, RF_Public|RF_Transient|RF_MarkAsNative, (EFunctionFlags)0x08080800, 0, 0, METADATA_PARAMS(Z_Construct_UFunction_ANS_Character_OnStopExtract_Statics::Function_MetaDataParams, UE_ARRAY_COUNT(Z_Construct_UFunction_ANS_Character_OnStopExtract_Statics::Function_MetaDataParams)) };
+	UFunction* Z_Construct_UFunction_ANS_Character_OnStopExtract()
+	{
+		static UFunction* ReturnFunction = nullptr;
+		if (!ReturnFunction)
+		{
+			UECodeGen_Private::ConstructUFunction(&ReturnFunction, Z_Construct_UFunction_ANS_Character_OnStopExtract_Statics::FuncParams);
+		}
+		return ReturnFunction;
+	}
+	struct Z_Construct_UFunction_ANS_Character_OnStun_Statics
+	{
+#if WITH_METADATA
+		static const UECodeGen_Private::FMetaDataPairParam Function_MetaDataParams[];
+#endif
+		static const UECodeGen_Private::FFunctionParams FuncParams;
+	};
+#if WITH_METADATA
+	const UECodeGen_Private::FMetaDataPairParam Z_Construct_UFunction_ANS_Character_OnStun_Statics::Function_MetaDataParams[] = {
+		{ "Category", "Combat" },
+		{ "ModuleRelativePath", "NS_Character.h" },
+	};
+#endif
+	const UECodeGen_Private::FFunctionParams Z_Construct_UFunction_ANS_Character_OnStun_Statics::FuncParams = { (UObject*(*)())Z_Construct_UClass_ANS_Character, nullptr, "OnStun", nullptr, nullptr, 0, nullptr, 0, RF_Public|RF_Transient|RF_MarkAsNative, (EFunctionFlags)0x08080800, 0, 0, METADATA_PARAMS(Z_Construct_UFunction_ANS_Character_OnStun_Statics::Function_MetaDataParams, UE_ARRAY_COUNT(Z_Construct_UFunction_ANS_Character_OnStun_Statics::Function_MetaDataParams)) };
+	UFunction* Z_Construct_UFunction_ANS_Character_OnStun()
+	{
+		static UFunction* ReturnFunction = nullptr;
+		if (!ReturnFunction)
+		{
+			UECodeGen_Private::ConstructUFunction(&ReturnFunction, Z_Construct_UFunction_ANS_Character_OnStun_Statics::FuncParams);
+		}
+		return ReturnFunction;
+	}
+	struct Z_Construct_UFunction_ANS_Character_OnStunEnd_Statics
+	{
+#if WITH_METADATA
+		static const UECodeGen_Private::FMetaDataPairParam Function_MetaDataParams[];
+#endif
+		static const UECodeGen_Private::FFunctionParams FuncParams;
+	};
+#if WITH_METADATA
+	const UECodeGen_Private::FMetaDataPairParam Z_Construct_UFunction_ANS_Character_OnStunEnd_Statics::Function_MetaDataParams[] = {
+		{ "Category", "Combat" },
+		{ "ModuleRelativePath", "NS_Character.h" },
+	};
+#endif
+	const UECodeGen_Private::FFunctionParams Z_Construct_UFunction_ANS_Character_OnStunEnd_Statics::FuncParams = { (UObject*(*)())Z_Construct_UClass_ANS_Character, nullptr, "OnStunEnd", nullptr, nullptr, 0, nullptr, 0, RF_Public|RF_Transient|RF_MarkAsNative, (EFunctionFlags)0x08080800, 0, 0, METADATA_PARAMS(Z_Construct_UFunction_ANS_Character_OnStunEnd_Statics::Function_MetaDataParams, UE_ARRAY_COUNT(Z_Construct_UFunction_ANS_Character_OnStunEnd_Statics::Function_MetaDataParams)) };
+	UFunction* Z_Construct_UFunction_ANS_Character_OnStunEnd()
+	{
+		static UFunction* ReturnFunction = nullptr;
+		if (!ReturnFunction)
+		{
+			UECodeGen_Private::ConstructUFunction(&ReturnFunction, Z_Construct_UFunction_ANS_Character_OnStunEnd_Statics::FuncParams);
 		}
 		return ReturnFunction;
 	}
@@ -953,6 +1376,29 @@ template<> NOVASTRIKE_API UScriptStruct* StaticStruct<FAttack>()
 		}
 		return ReturnFunction;
 	}
+	struct Z_Construct_UFunction_ANS_Character_StopExtract_Statics
+	{
+#if WITH_METADATA
+		static const UECodeGen_Private::FMetaDataPairParam Function_MetaDataParams[];
+#endif
+		static const UECodeGen_Private::FFunctionParams FuncParams;
+	};
+#if WITH_METADATA
+	const UECodeGen_Private::FMetaDataPairParam Z_Construct_UFunction_ANS_Character_StopExtract_Statics::Function_MetaDataParams[] = {
+		{ "Category", "Gun" },
+		{ "ModuleRelativePath", "NS_Character.h" },
+	};
+#endif
+	const UECodeGen_Private::FFunctionParams Z_Construct_UFunction_ANS_Character_StopExtract_Statics::FuncParams = { (UObject*(*)())Z_Construct_UClass_ANS_Character, nullptr, "StopExtract", nullptr, nullptr, 0, nullptr, 0, RF_Public|RF_Transient|RF_MarkAsNative, (EFunctionFlags)0x04080401, 0, 0, METADATA_PARAMS(Z_Construct_UFunction_ANS_Character_StopExtract_Statics::Function_MetaDataParams, UE_ARRAY_COUNT(Z_Construct_UFunction_ANS_Character_StopExtract_Statics::Function_MetaDataParams)) };
+	UFunction* Z_Construct_UFunction_ANS_Character_StopExtract()
+	{
+		static UFunction* ReturnFunction = nullptr;
+		if (!ReturnFunction)
+		{
+			UECodeGen_Private::ConstructUFunction(&ReturnFunction, Z_Construct_UFunction_ANS_Character_StopExtract_Statics::FuncParams);
+		}
+		return ReturnFunction;
+	}
 	struct Z_Construct_UFunction_ANS_Character_StopSprint_Statics
 	{
 #if WITH_METADATA
@@ -973,6 +1419,29 @@ template<> NOVASTRIKE_API UScriptStruct* StaticStruct<FAttack>()
 		if (!ReturnFunction)
 		{
 			UECodeGen_Private::ConstructUFunction(&ReturnFunction, Z_Construct_UFunction_ANS_Character_StopSprint_Statics::FuncParams);
+		}
+		return ReturnFunction;
+	}
+	struct Z_Construct_UFunction_ANS_Character_Stun_Statics
+	{
+#if WITH_METADATA
+		static const UECodeGen_Private::FMetaDataPairParam Function_MetaDataParams[];
+#endif
+		static const UECodeGen_Private::FFunctionParams FuncParams;
+	};
+#if WITH_METADATA
+	const UECodeGen_Private::FMetaDataPairParam Z_Construct_UFunction_ANS_Character_Stun_Statics::Function_MetaDataParams[] = {
+		{ "Category", "Combat" },
+		{ "ModuleRelativePath", "NS_Character.h" },
+	};
+#endif
+	const UECodeGen_Private::FFunctionParams Z_Construct_UFunction_ANS_Character_Stun_Statics::FuncParams = { (UObject*(*)())Z_Construct_UClass_ANS_Character, nullptr, "Stun", nullptr, nullptr, 0, nullptr, 0, RF_Public|RF_Transient|RF_MarkAsNative, (EFunctionFlags)0x04080401, 0, 0, METADATA_PARAMS(Z_Construct_UFunction_ANS_Character_Stun_Statics::Function_MetaDataParams, UE_ARRAY_COUNT(Z_Construct_UFunction_ANS_Character_Stun_Statics::Function_MetaDataParams)) };
+	UFunction* Z_Construct_UFunction_ANS_Character_Stun()
+	{
+		static UFunction* ReturnFunction = nullptr;
+		if (!ReturnFunction)
+		{
+			UECodeGen_Private::ConstructUFunction(&ReturnFunction, Z_Construct_UFunction_ANS_Character_Stun_Statics::FuncParams);
 		}
 		return ReturnFunction;
 	}
@@ -1076,7 +1545,7 @@ template<> NOVASTRIKE_API UScriptStruct* StaticStruct<FAttack>()
 		{ "ModuleRelativePath", "NS_Character.h" },
 	};
 #endif
-	const UECodeGen_Private::FFunctionParams Z_Construct_UFunction_ANS_Character_ZoomCamera_Statics::FuncParams = { (UObject*(*)())Z_Construct_UClass_ANS_Character, nullptr, "ZoomCamera", nullptr, nullptr, sizeof(NS_Character_eventZoomCamera_Parms), Z_Construct_UFunction_ANS_Character_ZoomCamera_Statics::PropPointers, UE_ARRAY_COUNT(Z_Construct_UFunction_ANS_Character_ZoomCamera_Statics::PropPointers), RF_Public|RF_Transient|RF_MarkAsNative, (EFunctionFlags)0x08080800, 0, 0, METADATA_PARAMS(Z_Construct_UFunction_ANS_Character_ZoomCamera_Statics::Function_MetaDataParams, UE_ARRAY_COUNT(Z_Construct_UFunction_ANS_Character_ZoomCamera_Statics::Function_MetaDataParams)) };
+	const UECodeGen_Private::FFunctionParams Z_Construct_UFunction_ANS_Character_ZoomCamera_Statics::FuncParams = { (UObject*(*)())Z_Construct_UClass_ANS_Character, nullptr, "ZoomCamera", nullptr, nullptr, sizeof(NS_Character_eventZoomCamera_Parms), Z_Construct_UFunction_ANS_Character_ZoomCamera_Statics::PropPointers, UE_ARRAY_COUNT(Z_Construct_UFunction_ANS_Character_ZoomCamera_Statics::PropPointers), RF_Public|RF_Transient|RF_MarkAsNative, (EFunctionFlags)0x0C080800, 0, 0, METADATA_PARAMS(Z_Construct_UFunction_ANS_Character_ZoomCamera_Statics::Function_MetaDataParams, UE_ARRAY_COUNT(Z_Construct_UFunction_ANS_Character_ZoomCamera_Statics::Function_MetaDataParams)) };
 	UFunction* Z_Construct_UFunction_ANS_Character_ZoomCamera()
 	{
 		static UFunction* ReturnFunction = nullptr;
@@ -1117,6 +1586,14 @@ template<> NOVASTRIKE_API UScriptStruct* StaticStruct<FAttack>()
 		static void NewProp_bIsSprinting_SetBit(void* Obj);
 		static const UECodeGen_Private::FBoolPropertyParams NewProp_bIsSprinting;
 #if WITH_METADATA
+		static const UECodeGen_Private::FMetaDataPairParam NewProp_Health_MetaData[];
+#endif
+		static const UECodeGen_Private::FFloatPropertyParams NewProp_Health;
+#if WITH_METADATA
+		static const UECodeGen_Private::FMetaDataPairParam NewProp_Temperature_MetaData[];
+#endif
+		static const UECodeGen_Private::FFloatPropertyParams NewProp_Temperature;
+#if WITH_METADATA
 		static const UECodeGen_Private::FMetaDataPairParam NewProp_SprintSpeed_MetaData[];
 #endif
 		static const UECodeGen_Private::FFloatPropertyParams NewProp_SprintSpeed;
@@ -1155,6 +1632,16 @@ template<> NOVASTRIKE_API UScriptStruct* StaticStruct<FAttack>()
 		static const UECodeGen_Private::FMetaDataPairParam NewProp_SprintAttacks_MetaData[];
 #endif
 		static const UECodeGen_Private::FArrayPropertyParams NewProp_SprintAttacks;
+		static const UECodeGen_Private::FStructPropertyParams NewProp_LaunchAttacks_Inner;
+#if WITH_METADATA
+		static const UECodeGen_Private::FMetaDataPairParam NewProp_LaunchAttacks_MetaData[];
+#endif
+		static const UECodeGen_Private::FArrayPropertyParams NewProp_LaunchAttacks;
+		static const UECodeGen_Private::FStructPropertyParams NewProp_AttacksToUse_Inner;
+#if WITH_METADATA
+		static const UECodeGen_Private::FMetaDataPairParam NewProp_AttacksToUse_MetaData[];
+#endif
+		static const UECodeGen_Private::FArrayPropertyParams NewProp_AttacksToUse;
 #if WITH_METADATA
 		static const UECodeGen_Private::FMetaDataPairParam NewProp_CurrentAttackIndex_MetaData[];
 #endif
@@ -1180,9 +1667,65 @@ template<> NOVASTRIKE_API UScriptStruct* StaticStruct<FAttack>()
 		static void NewProp_Invincible_SetBit(void* Obj);
 		static const UECodeGen_Private::FBoolPropertyParams NewProp_Invincible;
 #if WITH_METADATA
+		static const UECodeGen_Private::FMetaDataPairParam NewProp_InAir_MetaData[];
+#endif
+		static void NewProp_InAir_SetBit(void* Obj);
+		static const UECodeGen_Private::FBoolPropertyParams NewProp_InAir;
+#if WITH_METADATA
 		static const UECodeGen_Private::FMetaDataPairParam NewProp_ComboResetTime_MetaData[];
 #endif
 		static const UECodeGen_Private::FFloatPropertyParams NewProp_ComboResetTime;
+#if WITH_METADATA
+		static const UECodeGen_Private::FMetaDataPairParam NewProp_Stunned_MetaData[];
+#endif
+		static void NewProp_Stunned_SetBit(void* Obj);
+		static const UECodeGen_Private::FBoolPropertyParams NewProp_Stunned;
+#if WITH_METADATA
+		static const UECodeGen_Private::FMetaDataPairParam NewProp_StunTime_MetaData[];
+#endif
+		static const UECodeGen_Private::FFloatPropertyParams NewProp_StunTime;
+#if WITH_METADATA
+		static const UECodeGen_Private::FMetaDataPairParam NewProp_DefaultCameraTurnRate_MetaData[];
+#endif
+		static const UECodeGen_Private::FFloatPropertyParams NewProp_DefaultCameraTurnRate;
+#if WITH_METADATA
+		static const UECodeGen_Private::FMetaDataPairParam NewProp_AimingCameraTurnRate_MetaData[];
+#endif
+		static const UECodeGen_Private::FFloatPropertyParams NewProp_AimingCameraTurnRate;
+#if WITH_METADATA
+		static const UECodeGen_Private::FMetaDataPairParam NewProp_WalkSpeedGunMode_MetaData[];
+#endif
+		static const UECodeGen_Private::FFloatPropertyParams NewProp_WalkSpeedGunMode;
+#if WITH_METADATA
+		static const UECodeGen_Private::FMetaDataPairParam NewProp_GunLinetraceLength_MetaData[];
+#endif
+		static const UECodeGen_Private::FFloatPropertyParams NewProp_GunLinetraceLength;
+#if WITH_METADATA
+		static const UECodeGen_Private::FMetaDataPairParam NewProp_FireMontage_MetaData[];
+#endif
+		static const UECodeGen_Private::FObjectPropertyParams NewProp_FireMontage;
+#if WITH_METADATA
+		static const UECodeGen_Private::FMetaDataPairParam NewProp_ExtractionSpeed_MetaData[];
+#endif
+		static const UECodeGen_Private::FFloatPropertyParams NewProp_ExtractionSpeed;
+#if WITH_METADATA
+		static const UECodeGen_Private::FMetaDataPairParam NewProp_AttachedActorGun_MetaData[];
+#endif
+		static const UECodeGen_Private::FObjectPropertyParams NewProp_AttachedActorGun;
+#if WITH_METADATA
+		static const UECodeGen_Private::FMetaDataPairParam NewProp_CanAttackDuringAiming_MetaData[];
+#endif
+		static void NewProp_CanAttackDuringAiming_SetBit(void* Obj);
+		static const UECodeGen_Private::FBoolPropertyParams NewProp_CanAttackDuringAiming;
+#if WITH_METADATA
+		static const UECodeGen_Private::FMetaDataPairParam NewProp_CanMoveWhenExtracting_MetaData[];
+#endif
+		static void NewProp_CanMoveWhenExtracting_SetBit(void* Obj);
+		static const UECodeGen_Private::FBoolPropertyParams NewProp_CanMoveWhenExtracting;
+#if WITH_METADATA
+		static const UECodeGen_Private::FMetaDataPairParam NewProp_AimChangeRate_MetaData[];
+#endif
+		static const UECodeGen_Private::FFloatPropertyParams NewProp_AimChangeRate;
 #if WITH_METADATA
 		static const UECodeGen_Private::FMetaDataPairParam NewProp_CurrentlyTargettedActor_MetaData[];
 #endif
@@ -1196,16 +1739,29 @@ template<> NOVASTRIKE_API UScriptStruct* StaticStruct<FAttack>()
 		(UObject* (*)())Z_Construct_UPackage__Script_NovaStrike,
 	};
 	const FClassFunctionLinkInfo Z_Construct_UClass_ANS_Character_Statics::FuncInfo[] = {
-		{ &Z_Construct_UFunction_ANS_Character_Attack, "Attack" }, // 1953138790
+		{ &Z_Construct_UFunction_ANS_Character_Attack, "Attack" }, // 3752337533
 		{ &Z_Construct_UFunction_ANS_Character_AttackBoxOverlapBegin, "AttackBoxOverlapBegin" }, // 1050073416
+		{ &Z_Construct_UFunction_ANS_Character_BeginGunCombat, "BeginGunCombat" }, // 3617219382
 		{ &Z_Construct_UFunction_ANS_Character_ContinueCombat, "ContinueCombat" }, // 396467173
+		{ &Z_Construct_UFunction_ANS_Character_Die, "Die" }, // 3833133253
 		{ &Z_Construct_UFunction_ANS_Character_EnableSteering, "EnableSteering" }, // 2020529346
 		{ &Z_Construct_UFunction_ANS_Character_EndCombat, "EndCombat" }, // 2789351135
-		{ &Z_Construct_UFunction_ANS_Character_EnterNovaMode, "EnterNovaMode" }, // 2720568024
-		{ &Z_Construct_UFunction_ANS_Character_GetCurrentAttack, "GetCurrentAttack" }, // 4069330193
+		{ &Z_Construct_UFunction_ANS_Character_EndGunCombat, "EndGunCombat" }, // 1472282257
+		{ &Z_Construct_UFunction_ANS_Character_EndStun, "EndStun" }, // 978915324
+		{ &Z_Construct_UFunction_ANS_Character_Extract, "Extract" }, // 2437509717
+		{ &Z_Construct_UFunction_ANS_Character_Fire, "Fire" }, // 29587569
+		{ &Z_Construct_UFunction_ANS_Character_GetCurrentAttack, "GetCurrentAttack" }, // 2357354543
 		{ &Z_Construct_UFunction_ANS_Character_GetNearestCharacter, "GetNearestCharacter" }, // 1738162931
+		{ &Z_Construct_UFunction_ANS_Character_OnBeginGunMode, "OnBeginGunMode" }, // 3702333591
+		{ &Z_Construct_UFunction_ANS_Character_OnDeath, "OnDeath" }, // 1967931508
+		{ &Z_Construct_UFunction_ANS_Character_OnEndGunMode, "OnEndGunMode" }, // 2797740200
 		{ &Z_Construct_UFunction_ANS_Character_OnEnterCombatMode, "OnEnterCombatMode" }, // 3717915240
 		{ &Z_Construct_UFunction_ANS_Character_OnEnterNeutralMode, "OnEnterNeutralMode" }, // 1205404591
+		{ &Z_Construct_UFunction_ANS_Character_OnExtract, "OnExtract" }, // 1208501062
+		{ &Z_Construct_UFunction_ANS_Character_OnFire, "OnFire" }, // 1520958132
+		{ &Z_Construct_UFunction_ANS_Character_OnStopExtract, "OnStopExtract" }, // 3812216281
+		{ &Z_Construct_UFunction_ANS_Character_OnStun, "OnStun" }, // 179247037
+		{ &Z_Construct_UFunction_ANS_Character_OnStunEnd, "OnStunEnd" }, // 1660482706
 		{ &Z_Construct_UFunction_ANS_Character_OnTarget, "OnTarget" }, // 2137569700
 		{ &Z_Construct_UFunction_ANS_Character_ResetCombo, "ResetCombo" }, // 3288045001
 		{ &Z_Construct_UFunction_ANS_Character_ResetSteering, "ResetSteering" }, // 44963999
@@ -1213,10 +1769,12 @@ template<> NOVASTRIKE_API UScriptStruct* StaticStruct<FAttack>()
 		{ &Z_Construct_UFunction_ANS_Character_SetInvincible, "SetInvincible" }, // 3124980231
 		{ &Z_Construct_UFunction_ANS_Character_SphereTraceForCharacters, "SphereTraceForCharacters" }, // 3994319595
 		{ &Z_Construct_UFunction_ANS_Character_Sprint, "Sprint" }, // 2982979289
+		{ &Z_Construct_UFunction_ANS_Character_StopExtract, "StopExtract" }, // 2373015787
 		{ &Z_Construct_UFunction_ANS_Character_StopSprint, "StopSprint" }, // 3719141676
+		{ &Z_Construct_UFunction_ANS_Character_Stun, "Stun" }, // 3922795586
 		{ &Z_Construct_UFunction_ANS_Character_TakeDamage, "TakeDamage" }, // 60451225
 		{ &Z_Construct_UFunction_ANS_Character_TryBeginTargetting, "TryBeginTargetting" }, // 4098302904
-		{ &Z_Construct_UFunction_ANS_Character_ZoomCamera, "ZoomCamera" }, // 4235260197
+		{ &Z_Construct_UFunction_ANS_Character_ZoomCamera, "ZoomCamera" }, // 2574840955
 	};
 #if WITH_METADATA
 	const UECodeGen_Private::FMetaDataPairParam Z_Construct_UClass_ANS_Character_Statics::Class_MetaDataParams[] = {
@@ -1263,6 +1821,24 @@ template<> NOVASTRIKE_API UScriptStruct* StaticStruct<FAttack>()
 	}
 	const UECodeGen_Private::FBoolPropertyParams Z_Construct_UClass_ANS_Character_Statics::NewProp_bIsSprinting = { "bIsSprinting", nullptr, (EPropertyFlags)0x0020080000000014, UECodeGen_Private::EPropertyGenFlags::Bool | UECodeGen_Private::EPropertyGenFlags::NativeBool, RF_Public|RF_Transient|RF_MarkAsNative, 1, sizeof(bool), sizeof(ANS_Character), &Z_Construct_UClass_ANS_Character_Statics::NewProp_bIsSprinting_SetBit, METADATA_PARAMS(Z_Construct_UClass_ANS_Character_Statics::NewProp_bIsSprinting_MetaData, UE_ARRAY_COUNT(Z_Construct_UClass_ANS_Character_Statics::NewProp_bIsSprinting_MetaData)) };
 #if WITH_METADATA
+	const UECodeGen_Private::FMetaDataPairParam Z_Construct_UClass_ANS_Character_Statics::NewProp_Health_MetaData[] = {
+		{ "Category", "Combat" },
+		{ "Comment", "// Health float value between 0 and 1\n" },
+		{ "ModuleRelativePath", "NS_Character.h" },
+		{ "ToolTip", "Health float value between 0 and 1" },
+	};
+#endif
+	const UECodeGen_Private::FFloatPropertyParams Z_Construct_UClass_ANS_Character_Statics::NewProp_Health = { "Health", nullptr, (EPropertyFlags)0x0020080000000005, UECodeGen_Private::EPropertyGenFlags::Float, RF_Public|RF_Transient|RF_MarkAsNative, 1, STRUCT_OFFSET(ANS_Character, Health), METADATA_PARAMS(Z_Construct_UClass_ANS_Character_Statics::NewProp_Health_MetaData, UE_ARRAY_COUNT(Z_Construct_UClass_ANS_Character_Statics::NewProp_Health_MetaData)) };
+#if WITH_METADATA
+	const UECodeGen_Private::FMetaDataPairParam Z_Construct_UClass_ANS_Character_Statics::NewProp_Temperature_MetaData[] = {
+		{ "Category", "Combat" },
+		{ "Comment", "// Temperature float value between 0 and 1\n" },
+		{ "ModuleRelativePath", "NS_Character.h" },
+		{ "ToolTip", "Temperature float value between 0 and 1" },
+	};
+#endif
+	const UECodeGen_Private::FFloatPropertyParams Z_Construct_UClass_ANS_Character_Statics::NewProp_Temperature = { "Temperature", nullptr, (EPropertyFlags)0x0020080000000005, UECodeGen_Private::EPropertyGenFlags::Float, RF_Public|RF_Transient|RF_MarkAsNative, 1, STRUCT_OFFSET(ANS_Character, Temperature), METADATA_PARAMS(Z_Construct_UClass_ANS_Character_Statics::NewProp_Temperature_MetaData, UE_ARRAY_COUNT(Z_Construct_UClass_ANS_Character_Statics::NewProp_Temperature_MetaData)) };
+#if WITH_METADATA
 	const UECodeGen_Private::FMetaDataPairParam Z_Construct_UClass_ANS_Character_Statics::NewProp_SprintSpeed_MetaData[] = {
 		{ "Category", "Movement" },
 		{ "ModuleRelativePath", "NS_Character.h" },
@@ -1306,7 +1882,7 @@ template<> NOVASTRIKE_API UScriptStruct* StaticStruct<FAttack>()
 	};
 #endif
 	const UECodeGen_Private::FFloatPropertyParams Z_Construct_UClass_ANS_Character_Statics::NewProp_CameraZoomSpeed = { "CameraZoomSpeed", nullptr, (EPropertyFlags)0x0020080000000015, UECodeGen_Private::EPropertyGenFlags::Float, RF_Public|RF_Transient|RF_MarkAsNative, 1, STRUCT_OFFSET(ANS_Character, CameraZoomSpeed), METADATA_PARAMS(Z_Construct_UClass_ANS_Character_Statics::NewProp_CameraZoomSpeed_MetaData, UE_ARRAY_COUNT(Z_Construct_UClass_ANS_Character_Statics::NewProp_CameraZoomSpeed_MetaData)) };
-	const UECodeGen_Private::FStructPropertyParams Z_Construct_UClass_ANS_Character_Statics::NewProp_Attacks_Inner = { "Attacks", nullptr, (EPropertyFlags)0x0000000000000000, UECodeGen_Private::EPropertyGenFlags::Struct, RF_Public|RF_Transient|RF_MarkAsNative, 1, 0, Z_Construct_UScriptStruct_FAttack, METADATA_PARAMS(nullptr, 0) }; // 1367983484
+	const UECodeGen_Private::FStructPropertyParams Z_Construct_UClass_ANS_Character_Statics::NewProp_Attacks_Inner = { "Attacks", nullptr, (EPropertyFlags)0x0000000000000000, UECodeGen_Private::EPropertyGenFlags::Struct, RF_Public|RF_Transient|RF_MarkAsNative, 1, 0, Z_Construct_UScriptStruct_FAttack, METADATA_PARAMS(nullptr, 0) }; // 4286849046
 #if WITH_METADATA
 	const UECodeGen_Private::FMetaDataPairParam Z_Construct_UClass_ANS_Character_Statics::NewProp_Attacks_MetaData[] = {
 		{ "Category", "Combat" },
@@ -1315,23 +1891,39 @@ template<> NOVASTRIKE_API UScriptStruct* StaticStruct<FAttack>()
 		{ "ToolTip", "Zoom Speed for arm length changes(1 = 1 second, 0.5 = 2 seconds, 2 = 0.5 seconds, etc)." },
 	};
 #endif
-	const UECodeGen_Private::FArrayPropertyParams Z_Construct_UClass_ANS_Character_Statics::NewProp_Attacks = { "Attacks", nullptr, (EPropertyFlags)0x0020080000000015, UECodeGen_Private::EPropertyGenFlags::Array, RF_Public|RF_Transient|RF_MarkAsNative, 1, STRUCT_OFFSET(ANS_Character, Attacks), EArrayPropertyFlags::None, METADATA_PARAMS(Z_Construct_UClass_ANS_Character_Statics::NewProp_Attacks_MetaData, UE_ARRAY_COUNT(Z_Construct_UClass_ANS_Character_Statics::NewProp_Attacks_MetaData)) }; // 1367983484
-	const UECodeGen_Private::FStructPropertyParams Z_Construct_UClass_ANS_Character_Statics::NewProp_AirAttacks_Inner = { "AirAttacks", nullptr, (EPropertyFlags)0x0000000000000000, UECodeGen_Private::EPropertyGenFlags::Struct, RF_Public|RF_Transient|RF_MarkAsNative, 1, 0, Z_Construct_UScriptStruct_FAttack, METADATA_PARAMS(nullptr, 0) }; // 1367983484
+	const UECodeGen_Private::FArrayPropertyParams Z_Construct_UClass_ANS_Character_Statics::NewProp_Attacks = { "Attacks", nullptr, (EPropertyFlags)0x0020080000000015, UECodeGen_Private::EPropertyGenFlags::Array, RF_Public|RF_Transient|RF_MarkAsNative, 1, STRUCT_OFFSET(ANS_Character, Attacks), EArrayPropertyFlags::None, METADATA_PARAMS(Z_Construct_UClass_ANS_Character_Statics::NewProp_Attacks_MetaData, UE_ARRAY_COUNT(Z_Construct_UClass_ANS_Character_Statics::NewProp_Attacks_MetaData)) }; // 4286849046
+	const UECodeGen_Private::FStructPropertyParams Z_Construct_UClass_ANS_Character_Statics::NewProp_AirAttacks_Inner = { "AirAttacks", nullptr, (EPropertyFlags)0x0000000000000000, UECodeGen_Private::EPropertyGenFlags::Struct, RF_Public|RF_Transient|RF_MarkAsNative, 1, 0, Z_Construct_UScriptStruct_FAttack, METADATA_PARAMS(nullptr, 0) }; // 4286849046
 #if WITH_METADATA
 	const UECodeGen_Private::FMetaDataPairParam Z_Construct_UClass_ANS_Character_Statics::NewProp_AirAttacks_MetaData[] = {
 		{ "Category", "Combat" },
 		{ "ModuleRelativePath", "NS_Character.h" },
 	};
 #endif
-	const UECodeGen_Private::FArrayPropertyParams Z_Construct_UClass_ANS_Character_Statics::NewProp_AirAttacks = { "AirAttacks", nullptr, (EPropertyFlags)0x0020080000000015, UECodeGen_Private::EPropertyGenFlags::Array, RF_Public|RF_Transient|RF_MarkAsNative, 1, STRUCT_OFFSET(ANS_Character, AirAttacks), EArrayPropertyFlags::None, METADATA_PARAMS(Z_Construct_UClass_ANS_Character_Statics::NewProp_AirAttacks_MetaData, UE_ARRAY_COUNT(Z_Construct_UClass_ANS_Character_Statics::NewProp_AirAttacks_MetaData)) }; // 1367983484
-	const UECodeGen_Private::FStructPropertyParams Z_Construct_UClass_ANS_Character_Statics::NewProp_SprintAttacks_Inner = { "SprintAttacks", nullptr, (EPropertyFlags)0x0000000000000000, UECodeGen_Private::EPropertyGenFlags::Struct, RF_Public|RF_Transient|RF_MarkAsNative, 1, 0, Z_Construct_UScriptStruct_FAttack, METADATA_PARAMS(nullptr, 0) }; // 1367983484
+	const UECodeGen_Private::FArrayPropertyParams Z_Construct_UClass_ANS_Character_Statics::NewProp_AirAttacks = { "AirAttacks", nullptr, (EPropertyFlags)0x0020080000000015, UECodeGen_Private::EPropertyGenFlags::Array, RF_Public|RF_Transient|RF_MarkAsNative, 1, STRUCT_OFFSET(ANS_Character, AirAttacks), EArrayPropertyFlags::None, METADATA_PARAMS(Z_Construct_UClass_ANS_Character_Statics::NewProp_AirAttacks_MetaData, UE_ARRAY_COUNT(Z_Construct_UClass_ANS_Character_Statics::NewProp_AirAttacks_MetaData)) }; // 4286849046
+	const UECodeGen_Private::FStructPropertyParams Z_Construct_UClass_ANS_Character_Statics::NewProp_SprintAttacks_Inner = { "SprintAttacks", nullptr, (EPropertyFlags)0x0000000000000000, UECodeGen_Private::EPropertyGenFlags::Struct, RF_Public|RF_Transient|RF_MarkAsNative, 1, 0, Z_Construct_UScriptStruct_FAttack, METADATA_PARAMS(nullptr, 0) }; // 4286849046
 #if WITH_METADATA
 	const UECodeGen_Private::FMetaDataPairParam Z_Construct_UClass_ANS_Character_Statics::NewProp_SprintAttacks_MetaData[] = {
 		{ "Category", "Combat" },
 		{ "ModuleRelativePath", "NS_Character.h" },
 	};
 #endif
-	const UECodeGen_Private::FArrayPropertyParams Z_Construct_UClass_ANS_Character_Statics::NewProp_SprintAttacks = { "SprintAttacks", nullptr, (EPropertyFlags)0x0020080000000015, UECodeGen_Private::EPropertyGenFlags::Array, RF_Public|RF_Transient|RF_MarkAsNative, 1, STRUCT_OFFSET(ANS_Character, SprintAttacks), EArrayPropertyFlags::None, METADATA_PARAMS(Z_Construct_UClass_ANS_Character_Statics::NewProp_SprintAttacks_MetaData, UE_ARRAY_COUNT(Z_Construct_UClass_ANS_Character_Statics::NewProp_SprintAttacks_MetaData)) }; // 1367983484
+	const UECodeGen_Private::FArrayPropertyParams Z_Construct_UClass_ANS_Character_Statics::NewProp_SprintAttacks = { "SprintAttacks", nullptr, (EPropertyFlags)0x0020080000000015, UECodeGen_Private::EPropertyGenFlags::Array, RF_Public|RF_Transient|RF_MarkAsNative, 1, STRUCT_OFFSET(ANS_Character, SprintAttacks), EArrayPropertyFlags::None, METADATA_PARAMS(Z_Construct_UClass_ANS_Character_Statics::NewProp_SprintAttacks_MetaData, UE_ARRAY_COUNT(Z_Construct_UClass_ANS_Character_Statics::NewProp_SprintAttacks_MetaData)) }; // 4286849046
+	const UECodeGen_Private::FStructPropertyParams Z_Construct_UClass_ANS_Character_Statics::NewProp_LaunchAttacks_Inner = { "LaunchAttacks", nullptr, (EPropertyFlags)0x0000000000000000, UECodeGen_Private::EPropertyGenFlags::Struct, RF_Public|RF_Transient|RF_MarkAsNative, 1, 0, Z_Construct_UScriptStruct_FAttack, METADATA_PARAMS(nullptr, 0) }; // 4286849046
+#if WITH_METADATA
+	const UECodeGen_Private::FMetaDataPairParam Z_Construct_UClass_ANS_Character_Statics::NewProp_LaunchAttacks_MetaData[] = {
+		{ "Category", "Combat" },
+		{ "ModuleRelativePath", "NS_Character.h" },
+	};
+#endif
+	const UECodeGen_Private::FArrayPropertyParams Z_Construct_UClass_ANS_Character_Statics::NewProp_LaunchAttacks = { "LaunchAttacks", nullptr, (EPropertyFlags)0x0020080000000015, UECodeGen_Private::EPropertyGenFlags::Array, RF_Public|RF_Transient|RF_MarkAsNative, 1, STRUCT_OFFSET(ANS_Character, LaunchAttacks), EArrayPropertyFlags::None, METADATA_PARAMS(Z_Construct_UClass_ANS_Character_Statics::NewProp_LaunchAttacks_MetaData, UE_ARRAY_COUNT(Z_Construct_UClass_ANS_Character_Statics::NewProp_LaunchAttacks_MetaData)) }; // 4286849046
+	const UECodeGen_Private::FStructPropertyParams Z_Construct_UClass_ANS_Character_Statics::NewProp_AttacksToUse_Inner = { "AttacksToUse", nullptr, (EPropertyFlags)0x0000000000000000, UECodeGen_Private::EPropertyGenFlags::Struct, RF_Public|RF_Transient|RF_MarkAsNative, 1, 0, Z_Construct_UScriptStruct_FAttack, METADATA_PARAMS(nullptr, 0) }; // 4286849046
+#if WITH_METADATA
+	const UECodeGen_Private::FMetaDataPairParam Z_Construct_UClass_ANS_Character_Statics::NewProp_AttacksToUse_MetaData[] = {
+		{ "Category", "Combat" },
+		{ "ModuleRelativePath", "NS_Character.h" },
+	};
+#endif
+	const UECodeGen_Private::FArrayPropertyParams Z_Construct_UClass_ANS_Character_Statics::NewProp_AttacksToUse = { "AttacksToUse", nullptr, (EPropertyFlags)0x0020080000000015, UECodeGen_Private::EPropertyGenFlags::Array, RF_Public|RF_Transient|RF_MarkAsNative, 1, STRUCT_OFFSET(ANS_Character, AttacksToUse), EArrayPropertyFlags::None, METADATA_PARAMS(Z_Construct_UClass_ANS_Character_Statics::NewProp_AttacksToUse_MetaData, UE_ARRAY_COUNT(Z_Construct_UClass_ANS_Character_Statics::NewProp_AttacksToUse_MetaData)) }; // 4286849046
 #if WITH_METADATA
 	const UECodeGen_Private::FMetaDataPairParam Z_Construct_UClass_ANS_Character_Statics::NewProp_CurrentAttackIndex_MetaData[] = {
 		{ "Category", "Combat" },
@@ -1381,12 +1973,123 @@ template<> NOVASTRIKE_API UScriptStruct* StaticStruct<FAttack>()
 	}
 	const UECodeGen_Private::FBoolPropertyParams Z_Construct_UClass_ANS_Character_Statics::NewProp_Invincible = { "Invincible", nullptr, (EPropertyFlags)0x0020080000000004, UECodeGen_Private::EPropertyGenFlags::Bool | UECodeGen_Private::EPropertyGenFlags::NativeBool, RF_Public|RF_Transient|RF_MarkAsNative, 1, sizeof(bool), sizeof(ANS_Character), &Z_Construct_UClass_ANS_Character_Statics::NewProp_Invincible_SetBit, METADATA_PARAMS(Z_Construct_UClass_ANS_Character_Statics::NewProp_Invincible_MetaData, UE_ARRAY_COUNT(Z_Construct_UClass_ANS_Character_Statics::NewProp_Invincible_MetaData)) };
 #if WITH_METADATA
+	const UECodeGen_Private::FMetaDataPairParam Z_Construct_UClass_ANS_Character_Statics::NewProp_InAir_MetaData[] = {
+		{ "Category", "Combat" },
+		{ "ModuleRelativePath", "NS_Character.h" },
+	};
+#endif
+	void Z_Construct_UClass_ANS_Character_Statics::NewProp_InAir_SetBit(void* Obj)
+	{
+		((ANS_Character*)Obj)->InAir = 1;
+	}
+	const UECodeGen_Private::FBoolPropertyParams Z_Construct_UClass_ANS_Character_Statics::NewProp_InAir = { "InAir", nullptr, (EPropertyFlags)0x0020080000000004, UECodeGen_Private::EPropertyGenFlags::Bool | UECodeGen_Private::EPropertyGenFlags::NativeBool, RF_Public|RF_Transient|RF_MarkAsNative, 1, sizeof(bool), sizeof(ANS_Character), &Z_Construct_UClass_ANS_Character_Statics::NewProp_InAir_SetBit, METADATA_PARAMS(Z_Construct_UClass_ANS_Character_Statics::NewProp_InAir_MetaData, UE_ARRAY_COUNT(Z_Construct_UClass_ANS_Character_Statics::NewProp_InAir_MetaData)) };
+#if WITH_METADATA
 	const UECodeGen_Private::FMetaDataPairParam Z_Construct_UClass_ANS_Character_Statics::NewProp_ComboResetTime_MetaData[] = {
 		{ "Category", "Combat" },
 		{ "ModuleRelativePath", "NS_Character.h" },
 	};
 #endif
-	const UECodeGen_Private::FFloatPropertyParams Z_Construct_UClass_ANS_Character_Statics::NewProp_ComboResetTime = { "ComboResetTime", nullptr, (EPropertyFlags)0x0020080000000001, UECodeGen_Private::EPropertyGenFlags::Float, RF_Public|RF_Transient|RF_MarkAsNative, 1, STRUCT_OFFSET(ANS_Character, ComboResetTime), METADATA_PARAMS(Z_Construct_UClass_ANS_Character_Statics::NewProp_ComboResetTime_MetaData, UE_ARRAY_COUNT(Z_Construct_UClass_ANS_Character_Statics::NewProp_ComboResetTime_MetaData)) };
+	const UECodeGen_Private::FFloatPropertyParams Z_Construct_UClass_ANS_Character_Statics::NewProp_ComboResetTime = { "ComboResetTime", nullptr, (EPropertyFlags)0x0020080000000005, UECodeGen_Private::EPropertyGenFlags::Float, RF_Public|RF_Transient|RF_MarkAsNative, 1, STRUCT_OFFSET(ANS_Character, ComboResetTime), METADATA_PARAMS(Z_Construct_UClass_ANS_Character_Statics::NewProp_ComboResetTime_MetaData, UE_ARRAY_COUNT(Z_Construct_UClass_ANS_Character_Statics::NewProp_ComboResetTime_MetaData)) };
+#if WITH_METADATA
+	const UECodeGen_Private::FMetaDataPairParam Z_Construct_UClass_ANS_Character_Statics::NewProp_Stunned_MetaData[] = {
+		{ "Category", "Combat" },
+		{ "ModuleRelativePath", "NS_Character.h" },
+	};
+#endif
+	void Z_Construct_UClass_ANS_Character_Statics::NewProp_Stunned_SetBit(void* Obj)
+	{
+		((ANS_Character*)Obj)->Stunned = 1;
+	}
+	const UECodeGen_Private::FBoolPropertyParams Z_Construct_UClass_ANS_Character_Statics::NewProp_Stunned = { "Stunned", nullptr, (EPropertyFlags)0x0020080000000004, UECodeGen_Private::EPropertyGenFlags::Bool | UECodeGen_Private::EPropertyGenFlags::NativeBool, RF_Public|RF_Transient|RF_MarkAsNative, 1, sizeof(bool), sizeof(ANS_Character), &Z_Construct_UClass_ANS_Character_Statics::NewProp_Stunned_SetBit, METADATA_PARAMS(Z_Construct_UClass_ANS_Character_Statics::NewProp_Stunned_MetaData, UE_ARRAY_COUNT(Z_Construct_UClass_ANS_Character_Statics::NewProp_Stunned_MetaData)) };
+#if WITH_METADATA
+	const UECodeGen_Private::FMetaDataPairParam Z_Construct_UClass_ANS_Character_Statics::NewProp_StunTime_MetaData[] = {
+		{ "Category", "Combat" },
+		{ "Comment", "// Time stunned after attack\n" },
+		{ "ModuleRelativePath", "NS_Character.h" },
+		{ "ToolTip", "Time stunned after attack" },
+	};
+#endif
+	const UECodeGen_Private::FFloatPropertyParams Z_Construct_UClass_ANS_Character_Statics::NewProp_StunTime = { "StunTime", nullptr, (EPropertyFlags)0x0020080000000005, UECodeGen_Private::EPropertyGenFlags::Float, RF_Public|RF_Transient|RF_MarkAsNative, 1, STRUCT_OFFSET(ANS_Character, StunTime), METADATA_PARAMS(Z_Construct_UClass_ANS_Character_Statics::NewProp_StunTime_MetaData, UE_ARRAY_COUNT(Z_Construct_UClass_ANS_Character_Statics::NewProp_StunTime_MetaData)) };
+#if WITH_METADATA
+	const UECodeGen_Private::FMetaDataPairParam Z_Construct_UClass_ANS_Character_Statics::NewProp_DefaultCameraTurnRate_MetaData[] = {
+		{ "Category", "Camera" },
+		{ "ModuleRelativePath", "NS_Character.h" },
+	};
+#endif
+	const UECodeGen_Private::FFloatPropertyParams Z_Construct_UClass_ANS_Character_Statics::NewProp_DefaultCameraTurnRate = { "DefaultCameraTurnRate", nullptr, (EPropertyFlags)0x0020080000000005, UECodeGen_Private::EPropertyGenFlags::Float, RF_Public|RF_Transient|RF_MarkAsNative, 1, STRUCT_OFFSET(ANS_Character, DefaultCameraTurnRate), METADATA_PARAMS(Z_Construct_UClass_ANS_Character_Statics::NewProp_DefaultCameraTurnRate_MetaData, UE_ARRAY_COUNT(Z_Construct_UClass_ANS_Character_Statics::NewProp_DefaultCameraTurnRate_MetaData)) };
+#if WITH_METADATA
+	const UECodeGen_Private::FMetaDataPairParam Z_Construct_UClass_ANS_Character_Statics::NewProp_AimingCameraTurnRate_MetaData[] = {
+		{ "Category", "Camera" },
+		{ "ModuleRelativePath", "NS_Character.h" },
+	};
+#endif
+	const UECodeGen_Private::FFloatPropertyParams Z_Construct_UClass_ANS_Character_Statics::NewProp_AimingCameraTurnRate = { "AimingCameraTurnRate", nullptr, (EPropertyFlags)0x0020080000000005, UECodeGen_Private::EPropertyGenFlags::Float, RF_Public|RF_Transient|RF_MarkAsNative, 1, STRUCT_OFFSET(ANS_Character, AimingCameraTurnRate), METADATA_PARAMS(Z_Construct_UClass_ANS_Character_Statics::NewProp_AimingCameraTurnRate_MetaData, UE_ARRAY_COUNT(Z_Construct_UClass_ANS_Character_Statics::NewProp_AimingCameraTurnRate_MetaData)) };
+#if WITH_METADATA
+	const UECodeGen_Private::FMetaDataPairParam Z_Construct_UClass_ANS_Character_Statics::NewProp_WalkSpeedGunMode_MetaData[] = {
+		{ "Category", "Gun" },
+		{ "ModuleRelativePath", "NS_Character.h" },
+	};
+#endif
+	const UECodeGen_Private::FFloatPropertyParams Z_Construct_UClass_ANS_Character_Statics::NewProp_WalkSpeedGunMode = { "WalkSpeedGunMode", nullptr, (EPropertyFlags)0x0020080000000005, UECodeGen_Private::EPropertyGenFlags::Float, RF_Public|RF_Transient|RF_MarkAsNative, 1, STRUCT_OFFSET(ANS_Character, WalkSpeedGunMode), METADATA_PARAMS(Z_Construct_UClass_ANS_Character_Statics::NewProp_WalkSpeedGunMode_MetaData, UE_ARRAY_COUNT(Z_Construct_UClass_ANS_Character_Statics::NewProp_WalkSpeedGunMode_MetaData)) };
+#if WITH_METADATA
+	const UECodeGen_Private::FMetaDataPairParam Z_Construct_UClass_ANS_Character_Statics::NewProp_GunLinetraceLength_MetaData[] = {
+		{ "Category", "Gun" },
+		{ "ModuleRelativePath", "NS_Character.h" },
+	};
+#endif
+	const UECodeGen_Private::FFloatPropertyParams Z_Construct_UClass_ANS_Character_Statics::NewProp_GunLinetraceLength = { "GunLinetraceLength", nullptr, (EPropertyFlags)0x0020080000000005, UECodeGen_Private::EPropertyGenFlags::Float, RF_Public|RF_Transient|RF_MarkAsNative, 1, STRUCT_OFFSET(ANS_Character, GunLinetraceLength), METADATA_PARAMS(Z_Construct_UClass_ANS_Character_Statics::NewProp_GunLinetraceLength_MetaData, UE_ARRAY_COUNT(Z_Construct_UClass_ANS_Character_Statics::NewProp_GunLinetraceLength_MetaData)) };
+#if WITH_METADATA
+	const UECodeGen_Private::FMetaDataPairParam Z_Construct_UClass_ANS_Character_Statics::NewProp_FireMontage_MetaData[] = {
+		{ "Category", "Gun" },
+		{ "ModuleRelativePath", "NS_Character.h" },
+	};
+#endif
+	const UECodeGen_Private::FObjectPropertyParams Z_Construct_UClass_ANS_Character_Statics::NewProp_FireMontage = { "FireMontage", nullptr, (EPropertyFlags)0x0020080000000005, UECodeGen_Private::EPropertyGenFlags::Object, RF_Public|RF_Transient|RF_MarkAsNative, 1, STRUCT_OFFSET(ANS_Character, FireMontage), Z_Construct_UClass_UAnimMontage_NoRegister, METADATA_PARAMS(Z_Construct_UClass_ANS_Character_Statics::NewProp_FireMontage_MetaData, UE_ARRAY_COUNT(Z_Construct_UClass_ANS_Character_Statics::NewProp_FireMontage_MetaData)) };
+#if WITH_METADATA
+	const UECodeGen_Private::FMetaDataPairParam Z_Construct_UClass_ANS_Character_Statics::NewProp_ExtractionSpeed_MetaData[] = {
+		{ "Category", "Gun" },
+		{ "ModuleRelativePath", "NS_Character.h" },
+	};
+#endif
+	const UECodeGen_Private::FFloatPropertyParams Z_Construct_UClass_ANS_Character_Statics::NewProp_ExtractionSpeed = { "ExtractionSpeed", nullptr, (EPropertyFlags)0x0020080000000005, UECodeGen_Private::EPropertyGenFlags::Float, RF_Public|RF_Transient|RF_MarkAsNative, 1, STRUCT_OFFSET(ANS_Character, ExtractionSpeed), METADATA_PARAMS(Z_Construct_UClass_ANS_Character_Statics::NewProp_ExtractionSpeed_MetaData, UE_ARRAY_COUNT(Z_Construct_UClass_ANS_Character_Statics::NewProp_ExtractionSpeed_MetaData)) };
+#if WITH_METADATA
+	const UECodeGen_Private::FMetaDataPairParam Z_Construct_UClass_ANS_Character_Statics::NewProp_AttachedActorGun_MetaData[] = {
+		{ "Category", "Gun" },
+		{ "ModuleRelativePath", "NS_Character.h" },
+	};
+#endif
+	const UECodeGen_Private::FObjectPropertyParams Z_Construct_UClass_ANS_Character_Statics::NewProp_AttachedActorGun = { "AttachedActorGun", nullptr, (EPropertyFlags)0x0020080000000004, UECodeGen_Private::EPropertyGenFlags::Object, RF_Public|RF_Transient|RF_MarkAsNative, 1, STRUCT_OFFSET(ANS_Character, AttachedActorGun), Z_Construct_UClass_AActor_NoRegister, METADATA_PARAMS(Z_Construct_UClass_ANS_Character_Statics::NewProp_AttachedActorGun_MetaData, UE_ARRAY_COUNT(Z_Construct_UClass_ANS_Character_Statics::NewProp_AttachedActorGun_MetaData)) };
+#if WITH_METADATA
+	const UECodeGen_Private::FMetaDataPairParam Z_Construct_UClass_ANS_Character_Statics::NewProp_CanAttackDuringAiming_MetaData[] = {
+		{ "Category", "Gun" },
+		{ "ModuleRelativePath", "NS_Character.h" },
+	};
+#endif
+	void Z_Construct_UClass_ANS_Character_Statics::NewProp_CanAttackDuringAiming_SetBit(void* Obj)
+	{
+		((ANS_Character*)Obj)->CanAttackDuringAiming = 1;
+	}
+	const UECodeGen_Private::FBoolPropertyParams Z_Construct_UClass_ANS_Character_Statics::NewProp_CanAttackDuringAiming = { "CanAttackDuringAiming", nullptr, (EPropertyFlags)0x0020080000000005, UECodeGen_Private::EPropertyGenFlags::Bool | UECodeGen_Private::EPropertyGenFlags::NativeBool, RF_Public|RF_Transient|RF_MarkAsNative, 1, sizeof(bool), sizeof(ANS_Character), &Z_Construct_UClass_ANS_Character_Statics::NewProp_CanAttackDuringAiming_SetBit, METADATA_PARAMS(Z_Construct_UClass_ANS_Character_Statics::NewProp_CanAttackDuringAiming_MetaData, UE_ARRAY_COUNT(Z_Construct_UClass_ANS_Character_Statics::NewProp_CanAttackDuringAiming_MetaData)) };
+#if WITH_METADATA
+	const UECodeGen_Private::FMetaDataPairParam Z_Construct_UClass_ANS_Character_Statics::NewProp_CanMoveWhenExtracting_MetaData[] = {
+		{ "Category", "Gun" },
+		{ "ModuleRelativePath", "NS_Character.h" },
+	};
+#endif
+	void Z_Construct_UClass_ANS_Character_Statics::NewProp_CanMoveWhenExtracting_SetBit(void* Obj)
+	{
+		((ANS_Character*)Obj)->CanMoveWhenExtracting = 1;
+	}
+	const UECodeGen_Private::FBoolPropertyParams Z_Construct_UClass_ANS_Character_Statics::NewProp_CanMoveWhenExtracting = { "CanMoveWhenExtracting", nullptr, (EPropertyFlags)0x0020080000000005, UECodeGen_Private::EPropertyGenFlags::Bool | UECodeGen_Private::EPropertyGenFlags::NativeBool, RF_Public|RF_Transient|RF_MarkAsNative, 1, sizeof(bool), sizeof(ANS_Character), &Z_Construct_UClass_ANS_Character_Statics::NewProp_CanMoveWhenExtracting_SetBit, METADATA_PARAMS(Z_Construct_UClass_ANS_Character_Statics::NewProp_CanMoveWhenExtracting_MetaData, UE_ARRAY_COUNT(Z_Construct_UClass_ANS_Character_Statics::NewProp_CanMoveWhenExtracting_MetaData)) };
+#if WITH_METADATA
+	const UECodeGen_Private::FMetaDataPairParam Z_Construct_UClass_ANS_Character_Statics::NewProp_AimChangeRate_MetaData[] = {
+		{ "Category", "Gun" },
+		{ "Comment", "// how fast does the player switch between the gun and sword (anim interpolation speed)\n" },
+		{ "ModuleRelativePath", "NS_Character.h" },
+		{ "ToolTip", "how fast does the player switch between the gun and sword (anim interpolation speed)" },
+	};
+#endif
+	const UECodeGen_Private::FFloatPropertyParams Z_Construct_UClass_ANS_Character_Statics::NewProp_AimChangeRate = { "AimChangeRate", nullptr, (EPropertyFlags)0x0020080000000005, UECodeGen_Private::EPropertyGenFlags::Float, RF_Public|RF_Transient|RF_MarkAsNative, 1, STRUCT_OFFSET(ANS_Character, AimChangeRate), METADATA_PARAMS(Z_Construct_UClass_ANS_Character_Statics::NewProp_AimChangeRate_MetaData, UE_ARRAY_COUNT(Z_Construct_UClass_ANS_Character_Statics::NewProp_AimChangeRate_MetaData)) };
 #if WITH_METADATA
 	const UECodeGen_Private::FMetaDataPairParam Z_Construct_UClass_ANS_Character_Statics::NewProp_CurrentlyTargettedActor_MetaData[] = {
 		{ "Category", "Combat" },
@@ -1400,6 +2103,8 @@ template<> NOVASTRIKE_API UScriptStruct* StaticStruct<FAttack>()
 		(const UECodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_ANS_Character_Statics::NewProp_HitBox,
 		(const UECodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_ANS_Character_Statics::NewProp_AttackBox,
 		(const UECodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_ANS_Character_Statics::NewProp_bIsSprinting,
+		(const UECodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_ANS_Character_Statics::NewProp_Health,
+		(const UECodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_ANS_Character_Statics::NewProp_Temperature,
 		(const UECodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_ANS_Character_Statics::NewProp_SprintSpeed,
 		(const UECodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_ANS_Character_Statics::NewProp_WalkSpeed,
 		(const UECodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_ANS_Character_Statics::NewProp_DefaultGravity,
@@ -1412,13 +2117,30 @@ template<> NOVASTRIKE_API UScriptStruct* StaticStruct<FAttack>()
 		(const UECodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_ANS_Character_Statics::NewProp_AirAttacks,
 		(const UECodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_ANS_Character_Statics::NewProp_SprintAttacks_Inner,
 		(const UECodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_ANS_Character_Statics::NewProp_SprintAttacks,
+		(const UECodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_ANS_Character_Statics::NewProp_LaunchAttacks_Inner,
+		(const UECodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_ANS_Character_Statics::NewProp_LaunchAttacks,
+		(const UECodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_ANS_Character_Statics::NewProp_AttacksToUse_Inner,
+		(const UECodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_ANS_Character_Statics::NewProp_AttacksToUse,
 		(const UECodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_ANS_Character_Statics::NewProp_CurrentAttackIndex,
 		(const UECodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_ANS_Character_Statics::NewProp_WaitingToAttack,
 		(const UECodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_ANS_Character_Statics::NewProp_ActorsInAttackRange_Inner,
 		(const UECodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_ANS_Character_Statics::NewProp_ActorsInAttackRange,
 		(const UECodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_ANS_Character_Statics::NewProp_InComboWindow,
 		(const UECodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_ANS_Character_Statics::NewProp_Invincible,
+		(const UECodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_ANS_Character_Statics::NewProp_InAir,
 		(const UECodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_ANS_Character_Statics::NewProp_ComboResetTime,
+		(const UECodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_ANS_Character_Statics::NewProp_Stunned,
+		(const UECodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_ANS_Character_Statics::NewProp_StunTime,
+		(const UECodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_ANS_Character_Statics::NewProp_DefaultCameraTurnRate,
+		(const UECodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_ANS_Character_Statics::NewProp_AimingCameraTurnRate,
+		(const UECodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_ANS_Character_Statics::NewProp_WalkSpeedGunMode,
+		(const UECodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_ANS_Character_Statics::NewProp_GunLinetraceLength,
+		(const UECodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_ANS_Character_Statics::NewProp_FireMontage,
+		(const UECodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_ANS_Character_Statics::NewProp_ExtractionSpeed,
+		(const UECodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_ANS_Character_Statics::NewProp_AttachedActorGun,
+		(const UECodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_ANS_Character_Statics::NewProp_CanAttackDuringAiming,
+		(const UECodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_ANS_Character_Statics::NewProp_CanMoveWhenExtracting,
+		(const UECodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_ANS_Character_Statics::NewProp_AimChangeRate,
 		(const UECodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_ANS_Character_Statics::NewProp_CurrentlyTargettedActor,
 	};
 	const FCppClassTypeInfoStatic Z_Construct_UClass_ANS_Character_Statics::StaticCppClassTypeInfo = {
@@ -1458,12 +2180,12 @@ template<> NOVASTRIKE_API UScriptStruct* StaticStruct<FAttack>()
 		static const FClassRegisterCompiledInInfo ClassInfo[];
 	};
 	const FStructRegisterCompiledInInfo Z_CompiledInDeferFile_FID_NovaStrike_Source_NovaStrike_NS_Character_h_Statics::ScriptStructInfo[] = {
-		{ FAttack::StaticStruct, Z_Construct_UScriptStruct_FAttack_Statics::NewStructOps, TEXT("Attack"), &Z_Registration_Info_UScriptStruct_Attack, CONSTRUCT_RELOAD_VERSION_INFO(FStructReloadVersionInfo, sizeof(FAttack), 1367983484U) },
+		{ FAttack::StaticStruct, Z_Construct_UScriptStruct_FAttack_Statics::NewStructOps, TEXT("Attack"), &Z_Registration_Info_UScriptStruct_Attack, CONSTRUCT_RELOAD_VERSION_INFO(FStructReloadVersionInfo, sizeof(FAttack), 4286849046U) },
 	};
 	const FClassRegisterCompiledInInfo Z_CompiledInDeferFile_FID_NovaStrike_Source_NovaStrike_NS_Character_h_Statics::ClassInfo[] = {
-		{ Z_Construct_UClass_ANS_Character, ANS_Character::StaticClass, TEXT("ANS_Character"), &Z_Registration_Info_UClass_ANS_Character, CONSTRUCT_RELOAD_VERSION_INFO(FClassReloadVersionInfo, sizeof(ANS_Character), 562331266U) },
+		{ Z_Construct_UClass_ANS_Character, ANS_Character::StaticClass, TEXT("ANS_Character"), &Z_Registration_Info_UClass_ANS_Character, CONSTRUCT_RELOAD_VERSION_INFO(FClassReloadVersionInfo, sizeof(ANS_Character), 2931465940U) },
 	};
-	static FRegisterCompiledInInfo Z_CompiledInDeferFile_FID_NovaStrike_Source_NovaStrike_NS_Character_h_3357346327(TEXT("/Script/NovaStrike"),
+	static FRegisterCompiledInInfo Z_CompiledInDeferFile_FID_NovaStrike_Source_NovaStrike_NS_Character_h_2409848751(TEXT("/Script/NovaStrike"),
 		Z_CompiledInDeferFile_FID_NovaStrike_Source_NovaStrike_NS_Character_h_Statics::ClassInfo, UE_ARRAY_COUNT(Z_CompiledInDeferFile_FID_NovaStrike_Source_NovaStrike_NS_Character_h_Statics::ClassInfo),
 		Z_CompiledInDeferFile_FID_NovaStrike_Source_NovaStrike_NS_Character_h_Statics::ScriptStructInfo, UE_ARRAY_COUNT(Z_CompiledInDeferFile_FID_NovaStrike_Source_NovaStrike_NS_Character_h_Statics::ScriptStructInfo),
 		nullptr, 0);

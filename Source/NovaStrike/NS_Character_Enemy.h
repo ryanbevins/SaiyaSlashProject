@@ -30,5 +30,19 @@ protected:
 	// Should immediately become aggressive towards player and not await overlap with EnemyAggressionBox?
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	bool autoAggression;
-	
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	float RandomWanderRadius = 2500.f;	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	float PatrolWalkSpeed = 300.f;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	UAnimMontage* BuffMontage;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	float IdleBuffDelay;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	float RunTowardsPlayerWalkSpeed;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	float AttackPrepDelay;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	float WalkBackAttackTime;
 };

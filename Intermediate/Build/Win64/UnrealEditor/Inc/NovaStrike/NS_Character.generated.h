@@ -27,17 +27,24 @@ enum class ECombatState : uint8;
 
 template<> NOVASTRIKE_API UScriptStruct* StaticStruct<struct FAttack>();
 
-#define FID_NovaStrike_Source_NovaStrike_NS_Character_h_58_SPARSE_DATA
-#define FID_NovaStrike_Source_NovaStrike_NS_Character_h_58_RPC_WRAPPERS \
+#define FID_NovaStrike_Source_NovaStrike_NS_Character_h_61_SPARSE_DATA
+#define FID_NovaStrike_Source_NovaStrike_NS_Character_h_61_RPC_WRAPPERS \
  \
 	DECLARE_FUNCTION(execTryBeginTargetting); \
 	DECLARE_FUNCTION(execSetInvincible); \
 	DECLARE_FUNCTION(execResetSteering); \
 	DECLARE_FUNCTION(execEnableSteering); \
-	DECLARE_FUNCTION(execEnterNovaMode); \
 	DECLARE_FUNCTION(execTakeDamage); \
 	DECLARE_FUNCTION(execResetCombo); \
 	DECLARE_FUNCTION(execContinueCombat); \
+	DECLARE_FUNCTION(execStopExtract); \
+	DECLARE_FUNCTION(execExtract); \
+	DECLARE_FUNCTION(execFire); \
+	DECLARE_FUNCTION(execEndGunCombat); \
+	DECLARE_FUNCTION(execBeginGunCombat); \
+	DECLARE_FUNCTION(execEndStun); \
+	DECLARE_FUNCTION(execStun); \
+	DECLARE_FUNCTION(execDie); \
 	DECLARE_FUNCTION(execGetCurrentAttack); \
 	DECLARE_FUNCTION(execEndCombat); \
 	DECLARE_FUNCTION(execAttack); \
@@ -49,16 +56,23 @@ template<> NOVASTRIKE_API UScriptStruct* StaticStruct<struct FAttack>();
 	DECLARE_FUNCTION(execSetCurrentCombatState);
 
 
-#define FID_NovaStrike_Source_NovaStrike_NS_Character_h_58_RPC_WRAPPERS_NO_PURE_DECLS \
+#define FID_NovaStrike_Source_NovaStrike_NS_Character_h_61_RPC_WRAPPERS_NO_PURE_DECLS \
  \
 	DECLARE_FUNCTION(execTryBeginTargetting); \
 	DECLARE_FUNCTION(execSetInvincible); \
 	DECLARE_FUNCTION(execResetSteering); \
 	DECLARE_FUNCTION(execEnableSteering); \
-	DECLARE_FUNCTION(execEnterNovaMode); \
 	DECLARE_FUNCTION(execTakeDamage); \
 	DECLARE_FUNCTION(execResetCombo); \
 	DECLARE_FUNCTION(execContinueCombat); \
+	DECLARE_FUNCTION(execStopExtract); \
+	DECLARE_FUNCTION(execExtract); \
+	DECLARE_FUNCTION(execFire); \
+	DECLARE_FUNCTION(execEndGunCombat); \
+	DECLARE_FUNCTION(execBeginGunCombat); \
+	DECLARE_FUNCTION(execEndStun); \
+	DECLARE_FUNCTION(execStun); \
+	DECLARE_FUNCTION(execDie); \
 	DECLARE_FUNCTION(execGetCurrentAttack); \
 	DECLARE_FUNCTION(execEndCombat); \
 	DECLARE_FUNCTION(execAttack); \
@@ -70,15 +84,15 @@ template<> NOVASTRIKE_API UScriptStruct* StaticStruct<struct FAttack>();
 	DECLARE_FUNCTION(execSetCurrentCombatState);
 
 
-#define FID_NovaStrike_Source_NovaStrike_NS_Character_h_58_EVENT_PARMS \
+#define FID_NovaStrike_Source_NovaStrike_NS_Character_h_61_EVENT_PARMS \
 	struct NS_Character_eventZoomCamera_Parms \
 	{ \
 		float DesiredArmLength; \
 	};
 
 
-#define FID_NovaStrike_Source_NovaStrike_NS_Character_h_58_CALLBACK_WRAPPERS
-#define FID_NovaStrike_Source_NovaStrike_NS_Character_h_58_INCLASS_NO_PURE_DECLS \
+#define FID_NovaStrike_Source_NovaStrike_NS_Character_h_61_CALLBACK_WRAPPERS
+#define FID_NovaStrike_Source_NovaStrike_NS_Character_h_61_INCLASS_NO_PURE_DECLS \
 private: \
 	static void StaticRegisterNativesANS_Character(); \
 	friend struct Z_Construct_UClass_ANS_Character_Statics; \
@@ -87,7 +101,7 @@ public: \
 	DECLARE_SERIALIZER(ANS_Character)
 
 
-#define FID_NovaStrike_Source_NovaStrike_NS_Character_h_58_INCLASS \
+#define FID_NovaStrike_Source_NovaStrike_NS_Character_h_61_INCLASS \
 private: \
 	static void StaticRegisterNativesANS_Character(); \
 	friend struct Z_Construct_UClass_ANS_Character_Statics; \
@@ -96,7 +110,7 @@ public: \
 	DECLARE_SERIALIZER(ANS_Character)
 
 
-#define FID_NovaStrike_Source_NovaStrike_NS_Character_h_58_STANDARD_CONSTRUCTORS \
+#define FID_NovaStrike_Source_NovaStrike_NS_Character_h_61_STANDARD_CONSTRUCTORS \
 	/** Standard constructor, called after all reflected properties have been initialized */ \
 	NO_API ANS_Character(const FObjectInitializer& ObjectInitializer); \
 	DEFINE_DEFAULT_OBJECT_INITIALIZER_CONSTRUCTOR_CALL(ANS_Character) \
@@ -109,7 +123,7 @@ private: \
 public:
 
 
-#define FID_NovaStrike_Source_NovaStrike_NS_Character_h_58_ENHANCED_CONSTRUCTORS \
+#define FID_NovaStrike_Source_NovaStrike_NS_Character_h_61_ENHANCED_CONSTRUCTORS \
 private: \
 	/** Private move- and copy-constructors, should never be used */ \
 	NO_API ANS_Character(ANS_Character&&); \
@@ -120,30 +134,30 @@ public: \
 	DEFINE_DEFAULT_CONSTRUCTOR_CALL(ANS_Character)
 
 
-#define FID_NovaStrike_Source_NovaStrike_NS_Character_h_55_PROLOG \
-	FID_NovaStrike_Source_NovaStrike_NS_Character_h_58_EVENT_PARMS
+#define FID_NovaStrike_Source_NovaStrike_NS_Character_h_58_PROLOG \
+	FID_NovaStrike_Source_NovaStrike_NS_Character_h_61_EVENT_PARMS
 
 
-#define FID_NovaStrike_Source_NovaStrike_NS_Character_h_58_GENERATED_BODY_LEGACY \
+#define FID_NovaStrike_Source_NovaStrike_NS_Character_h_61_GENERATED_BODY_LEGACY \
 PRAGMA_DISABLE_DEPRECATION_WARNINGS \
 public: \
-	FID_NovaStrike_Source_NovaStrike_NS_Character_h_58_SPARSE_DATA \
-	FID_NovaStrike_Source_NovaStrike_NS_Character_h_58_RPC_WRAPPERS \
-	FID_NovaStrike_Source_NovaStrike_NS_Character_h_58_CALLBACK_WRAPPERS \
-	FID_NovaStrike_Source_NovaStrike_NS_Character_h_58_INCLASS \
-	FID_NovaStrike_Source_NovaStrike_NS_Character_h_58_STANDARD_CONSTRUCTORS \
+	FID_NovaStrike_Source_NovaStrike_NS_Character_h_61_SPARSE_DATA \
+	FID_NovaStrike_Source_NovaStrike_NS_Character_h_61_RPC_WRAPPERS \
+	FID_NovaStrike_Source_NovaStrike_NS_Character_h_61_CALLBACK_WRAPPERS \
+	FID_NovaStrike_Source_NovaStrike_NS_Character_h_61_INCLASS \
+	FID_NovaStrike_Source_NovaStrike_NS_Character_h_61_STANDARD_CONSTRUCTORS \
 public: \
 PRAGMA_ENABLE_DEPRECATION_WARNINGS
 
 
-#define FID_NovaStrike_Source_NovaStrike_NS_Character_h_58_GENERATED_BODY \
+#define FID_NovaStrike_Source_NovaStrike_NS_Character_h_61_GENERATED_BODY \
 PRAGMA_DISABLE_DEPRECATION_WARNINGS \
 public: \
-	FID_NovaStrike_Source_NovaStrike_NS_Character_h_58_SPARSE_DATA \
-	FID_NovaStrike_Source_NovaStrike_NS_Character_h_58_RPC_WRAPPERS_NO_PURE_DECLS \
-	FID_NovaStrike_Source_NovaStrike_NS_Character_h_58_CALLBACK_WRAPPERS \
-	FID_NovaStrike_Source_NovaStrike_NS_Character_h_58_INCLASS_NO_PURE_DECLS \
-	FID_NovaStrike_Source_NovaStrike_NS_Character_h_58_ENHANCED_CONSTRUCTORS \
+	FID_NovaStrike_Source_NovaStrike_NS_Character_h_61_SPARSE_DATA \
+	FID_NovaStrike_Source_NovaStrike_NS_Character_h_61_RPC_WRAPPERS_NO_PURE_DECLS \
+	FID_NovaStrike_Source_NovaStrike_NS_Character_h_61_CALLBACK_WRAPPERS \
+	FID_NovaStrike_Source_NovaStrike_NS_Character_h_61_INCLASS_NO_PURE_DECLS \
+	FID_NovaStrike_Source_NovaStrike_NS_Character_h_61_ENHANCED_CONSTRUCTORS \
 private: \
 PRAGMA_ENABLE_DEPRECATION_WARNINGS
 

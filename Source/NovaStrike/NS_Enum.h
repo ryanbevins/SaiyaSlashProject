@@ -16,7 +16,7 @@ enum class ECombatState : uint8 {
 UENUM()
 enum class ECombatType : uint8 {
 	Normal,
-	Nova
+	Gun
 };
 
 class NOVASTRIKE_API NS_Enum

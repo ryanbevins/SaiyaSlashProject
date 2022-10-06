@@ -179,15 +179,15 @@ void EmptyLinkFunctionForGeneratedCodeNovaStrikeCharacter() {}
 #endif
 		static const UECodeGen_Private::FEnumPropertyParams NewProp_CurrentCombatType;
 #if WITH_METADATA
-		static const UECodeGen_Private::FMetaDataPairParam NewProp_InNovaMode_MetaData[];
-#endif
-		static void NewProp_InNovaMode_SetBit(void* Obj);
-		static const UECodeGen_Private::FBoolPropertyParams NewProp_InNovaMode;
-#if WITH_METADATA
 		static const UECodeGen_Private::FMetaDataPairParam NewProp_Moved_MetaData[];
 #endif
 		static void NewProp_Moved_SetBit(void* Obj);
 		static const UECodeGen_Private::FBoolPropertyParams NewProp_Moved;
+#if WITH_METADATA
+		static const UECodeGen_Private::FMetaDataPairParam NewProp_CanMove_MetaData[];
+#endif
+		static void NewProp_CanMove_SetBit(void* Obj);
+		static const UECodeGen_Private::FBoolPropertyParams NewProp_CanMove;
 		static const UECodeGen_Private::FPropertyParamsBase* const PropPointers[];
 		static const FCppClassTypeInfoStatic StaticCppClassTypeInfo;
 		static const UECodeGen_Private::FClassParams ClassParams;
@@ -288,18 +288,7 @@ void EmptyLinkFunctionForGeneratedCodeNovaStrikeCharacter() {}
 		{ "ModuleRelativePath", "NovaStrikeCharacter.h" },
 	};
 #endif
-	const UECodeGen_Private::FEnumPropertyParams Z_Construct_UClass_ANovaStrikeCharacter_Statics::NewProp_CurrentCombatType = { "CurrentCombatType", nullptr, (EPropertyFlags)0x0010000000000004, UECodeGen_Private::EPropertyGenFlags::Enum, RF_Public|RF_Transient|RF_MarkAsNative, 1, STRUCT_OFFSET(ANovaStrikeCharacter, CurrentCombatType), Z_Construct_UEnum_NovaStrike_ECombatType, METADATA_PARAMS(Z_Construct_UClass_ANovaStrikeCharacter_Statics::NewProp_CurrentCombatType_MetaData, UE_ARRAY_COUNT(Z_Construct_UClass_ANovaStrikeCharacter_Statics::NewProp_CurrentCombatType_MetaData)) }; // 3440640274
-#if WITH_METADATA
-	const UECodeGen_Private::FMetaDataPairParam Z_Construct_UClass_ANovaStrikeCharacter_Statics::NewProp_InNovaMode_MetaData[] = {
-		{ "Category", "Combat" },
-		{ "ModuleRelativePath", "NovaStrikeCharacter.h" },
-	};
-#endif
-	void Z_Construct_UClass_ANovaStrikeCharacter_Statics::NewProp_InNovaMode_SetBit(void* Obj)
-	{
-		((ANovaStrikeCharacter*)Obj)->InNovaMode = 1;
-	}
-	const UECodeGen_Private::FBoolPropertyParams Z_Construct_UClass_ANovaStrikeCharacter_Statics::NewProp_InNovaMode = { "InNovaMode", nullptr, (EPropertyFlags)0x0010000000000004, UECodeGen_Private::EPropertyGenFlags::Bool | UECodeGen_Private::EPropertyGenFlags::NativeBool, RF_Public|RF_Transient|RF_MarkAsNative, 1, sizeof(bool), sizeof(ANovaStrikeCharacter), &Z_Construct_UClass_ANovaStrikeCharacter_Statics::NewProp_InNovaMode_SetBit, METADATA_PARAMS(Z_Construct_UClass_ANovaStrikeCharacter_Statics::NewProp_InNovaMode_MetaData, UE_ARRAY_COUNT(Z_Construct_UClass_ANovaStrikeCharacter_Statics::NewProp_InNovaMode_MetaData)) };
+	const UECodeGen_Private::FEnumPropertyParams Z_Construct_UClass_ANovaStrikeCharacter_Statics::NewProp_CurrentCombatType = { "CurrentCombatType", nullptr, (EPropertyFlags)0x0010000000000004, UECodeGen_Private::EPropertyGenFlags::Enum, RF_Public|RF_Transient|RF_MarkAsNative, 1, STRUCT_OFFSET(ANovaStrikeCharacter, CurrentCombatType), Z_Construct_UEnum_NovaStrike_ECombatType, METADATA_PARAMS(Z_Construct_UClass_ANovaStrikeCharacter_Statics::NewProp_CurrentCombatType_MetaData, UE_ARRAY_COUNT(Z_Construct_UClass_ANovaStrikeCharacter_Statics::NewProp_CurrentCombatType_MetaData)) }; // 3966019754
 #if WITH_METADATA
 	const UECodeGen_Private::FMetaDataPairParam Z_Construct_UClass_ANovaStrikeCharacter_Statics::NewProp_Moved_MetaData[] = {
 		{ "Category", "Combat" },
@@ -313,6 +302,17 @@ void EmptyLinkFunctionForGeneratedCodeNovaStrikeCharacter() {}
 		((ANovaStrikeCharacter*)Obj)->Moved = 1;
 	}
 	const UECodeGen_Private::FBoolPropertyParams Z_Construct_UClass_ANovaStrikeCharacter_Statics::NewProp_Moved = { "Moved", nullptr, (EPropertyFlags)0x0010000000000004, UECodeGen_Private::EPropertyGenFlags::Bool | UECodeGen_Private::EPropertyGenFlags::NativeBool, RF_Public|RF_Transient|RF_MarkAsNative, 1, sizeof(bool), sizeof(ANovaStrikeCharacter), &Z_Construct_UClass_ANovaStrikeCharacter_Statics::NewProp_Moved_SetBit, METADATA_PARAMS(Z_Construct_UClass_ANovaStrikeCharacter_Statics::NewProp_Moved_MetaData, UE_ARRAY_COUNT(Z_Construct_UClass_ANovaStrikeCharacter_Statics::NewProp_Moved_MetaData)) };
+#if WITH_METADATA
+	const UECodeGen_Private::FMetaDataPairParam Z_Construct_UClass_ANovaStrikeCharacter_Statics::NewProp_CanMove_MetaData[] = {
+		{ "Category", "Movement" },
+		{ "ModuleRelativePath", "NovaStrikeCharacter.h" },
+	};
+#endif
+	void Z_Construct_UClass_ANovaStrikeCharacter_Statics::NewProp_CanMove_SetBit(void* Obj)
+	{
+		((ANovaStrikeCharacter*)Obj)->CanMove = 1;
+	}
+	const UECodeGen_Private::FBoolPropertyParams Z_Construct_UClass_ANovaStrikeCharacter_Statics::NewProp_CanMove = { "CanMove", nullptr, (EPropertyFlags)0x0010000000000004, UECodeGen_Private::EPropertyGenFlags::Bool | UECodeGen_Private::EPropertyGenFlags::NativeBool, RF_Public|RF_Transient|RF_MarkAsNative, 1, sizeof(bool), sizeof(ANovaStrikeCharacter), &Z_Construct_UClass_ANovaStrikeCharacter_Statics::NewProp_CanMove_SetBit, METADATA_PARAMS(Z_Construct_UClass_ANovaStrikeCharacter_Statics::NewProp_CanMove_MetaData, UE_ARRAY_COUNT(Z_Construct_UClass_ANovaStrikeCharacter_Statics::NewProp_CanMove_MetaData)) };
 	const UECodeGen_Private::FPropertyParamsBase* const Z_Construct_UClass_ANovaStrikeCharacter_Statics::PropPointers[] = {
 		(const UECodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_ANovaStrikeCharacter_Statics::NewProp_CameraBoom,
 		(const UECodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_ANovaStrikeCharacter_Statics::NewProp_FollowCamera,
@@ -324,8 +324,8 @@ void EmptyLinkFunctionForGeneratedCodeNovaStrikeCharacter() {}
 		(const UECodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_ANovaStrikeCharacter_Statics::NewProp_CanCancelAttack,
 		(const UECodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_ANovaStrikeCharacter_Statics::NewProp_CurrentCombatType_Underlying,
 		(const UECodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_ANovaStrikeCharacter_Statics::NewProp_CurrentCombatType,
-		(const UECodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_ANovaStrikeCharacter_Statics::NewProp_InNovaMode,
 		(const UECodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_ANovaStrikeCharacter_Statics::NewProp_Moved,
+		(const UECodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_ANovaStrikeCharacter_Statics::NewProp_CanMove,
 	};
 	const FCppClassTypeInfoStatic Z_Construct_UClass_ANovaStrikeCharacter_Statics::StaticCppClassTypeInfo = {
 		TCppClassTypeTraits<ANovaStrikeCharacter>::IsAbstract,
@@ -363,9 +363,9 @@ void EmptyLinkFunctionForGeneratedCodeNovaStrikeCharacter() {}
 		static const FClassRegisterCompiledInInfo ClassInfo[];
 	};
 	const FClassRegisterCompiledInInfo Z_CompiledInDeferFile_FID_NovaStrike_Source_NovaStrike_NovaStrikeCharacter_h_Statics::ClassInfo[] = {
-		{ Z_Construct_UClass_ANovaStrikeCharacter, ANovaStrikeCharacter::StaticClass, TEXT("ANovaStrikeCharacter"), &Z_Registration_Info_UClass_ANovaStrikeCharacter, CONSTRUCT_RELOAD_VERSION_INFO(FClassReloadVersionInfo, sizeof(ANovaStrikeCharacter), 2529192331U) },
+		{ Z_Construct_UClass_ANovaStrikeCharacter, ANovaStrikeCharacter::StaticClass, TEXT("ANovaStrikeCharacter"), &Z_Registration_Info_UClass_ANovaStrikeCharacter, CONSTRUCT_RELOAD_VERSION_INFO(FClassReloadVersionInfo, sizeof(ANovaStrikeCharacter), 1680141819U) },
 	};
-	static FRegisterCompiledInInfo Z_CompiledInDeferFile_FID_NovaStrike_Source_NovaStrike_NovaStrikeCharacter_h_1502020567(TEXT("/Script/NovaStrike"),
+	static FRegisterCompiledInInfo Z_CompiledInDeferFile_FID_NovaStrike_Source_NovaStrike_NovaStrikeCharacter_h_2998199031(TEXT("/Script/NovaStrike"),
 		Z_CompiledInDeferFile_FID_NovaStrike_Source_NovaStrike_NovaStrikeCharacter_h_Statics::ClassInfo, UE_ARRAY_COUNT(Z_CompiledInDeferFile_FID_NovaStrike_Source_NovaStrike_NovaStrikeCharacter_h_Statics::ClassInfo),
 		nullptr, 0,
 		nullptr, 0);
